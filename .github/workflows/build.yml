@@ -66,10 +66,17 @@ jobs:
           export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
           export PATH="$PS5_PAYLOAD_SDK/bin:$PATH"
           export LLVM_CONFIG=/usr/lib/llvm-18/bin/llvm-config
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            VER="$GITHUB_REF_NAME"
+          else
+            VER="dev-${GITHUB_SHA:0:7}"
+          fi
+          echo "GAELANILIVE_VERSION=$VER"
           prospero-cmake -S "$ONIONHEN/source" -B "$ONIONHEN/build" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DONIONHEN_KSTUFF_ELF="$ONIONHEN/.cache/dependencies/kstuff.elf" \
             -DPS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK" \
+            -DGAELANILIVE_VERSION="$VER" \
             2>&1 | tee /tmp/configure.log | tail -40
 
       - name: Build gaelanilive.elf
@@ -77,13 +84,15 @@ jobs:
           export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
           export PATH="$PS5_PAYLOAD_SDK/bin:$PATH"
           cmake --build "$ONIONHEN/build" -j"$(nproc)" --target gaelanilive
-          sha256sum "$ONIONHEN/build/bin/gaelanilive.elf"
           cp "$ONIONHEN/build/bin/gaelanilive.elf" "$GITHUB_WORKSPACE/gaelanilive.elf"
+          cd "$GITHUB_WORKSPACE"
+          sha256sum gaelanilive.elf > gaelanilive.elf.sha256
+          cat gaelanilive.elf.sha256
 
-      - name: Verify branding in ELF
+      - name: Verify branding and version in ELF
         run: |
           python3 - <<'PY'
-          import sys
+          import os, sys
           data = open('gaelanilive.elf', 'rb').read()
           must = [b'GaelaniLIVE', b'/data/GaelaniLIVE', b'gaelanilive.log']
           forbidden = [b'/data/' + b'Live' + b'Shell', b'/system_tmp/' + b'live' + b'shell']
@@ -94,6 +103,11 @@ jobs:
           for f in forbidden:
               if f in data:
                   print('FORBIDDEN PRESENT:', f.decode()); ok = False
+          ref = os.environ.get('GITHUB_REF', '')
+          ver = os.environ['GITHUB_REF_NAME'] if ref.startswith('refs/tags/') \
+              else 'dev-' + os.environ['GITHUB_SHA'][:7]
+          if ver.encode() not in data:
+              print('VERSION NOT EMBEDDED:', ver); ok = False
           sys.exit(0 if ok else 1)
           PY
 
@@ -101,11 +115,25 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gaelanilive-elf
-          path: gaelanilive.elf
+          path: |
+            gaelanilive.elf
+            gaelanilive.elf.sha256
+
+      - name: Release notes from CHANGELOG
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          awk -v tag="$GITHUB_REF_NAME" '
+            /^## / { if (found) exit; if (index($0, tag)) found = 1; next }
+            found { print }
+          ' CHANGELOG.md > /tmp/release_body.md
+          if ! test -s /tmp/release_body.md; then cp CHANGELOG.md /tmp/release_body.md; fi
+          head -20 /tmp/release_body.md
 
       - name: Release (tags only)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: gaelanilive.elf
-          generate_release_notes: true
+          files: |
+            gaelanilive.elf
+            gaelanilive.elf.sha256
+          body_path: /tmp/release_body.md

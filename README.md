@@ -1,8 +1,8 @@
-# GaelaniLIVE Engine
+# GaelaniLIVE
 
 **Fondos de pantalla animados (vídeo) para la pantalla de inicio de la PS5.**
 
-[![version](https://img.shields.io/badge/version-1.0.0-blue?style=flat-square)]()
+[![version](https://img.shields.io/badge/version-1.1.0-blue?style=flat-square)]()
 [![platform](https://img.shields.io/badge/platform-PS5-003791?style=flat-square)]()
 [![license](https://img.shields.io/badge/license-GPL--3.0-green?style=flat-square)](LICENSE)
 
@@ -27,6 +27,10 @@ con interfaz renovada, propios recursos y nuevas funciones.
 - **Reposo**: vuelve solo al despertar la consola.
 - **App en la pantalla de inicio** para elegir y controlar todo.
 - **Página móvil/PC** para subir, reproducir y borrar vídeos.
+- **Auto-actualización**: comprueba el release en GitHub desde la propia PS5,
+  descarga y verifica (sha256) la nueva versión e instala con reversión automática
+  si el arranque falla.
+- **Color de acento**: 8 temas para pestañas, interruptores y controles.
 - **Interfaz en español** (app de la PS5, página remota y notificaciones).
 
 ## Instalación
@@ -35,7 +39,7 @@ Necesitas una PS5 con jailbreak y un cargador de payloads.
 
 1. Copia archivos `.mp4` a `/data/GaelaniLIVE/video`, o a una carpeta `gaelanilive` en un USB.
 2. Carga `gaelanilive.elf`.
-3. Abre **GaelaniLIVE Engine** en la pantalla de inicio (Media).
+3. Abre **GaelaniLIVE** en la pantalla de inicio (Media).
 
 Vídeos: H.264 o HEVC, 8-bit, hasta 4K, con o sin sonido. Usa el conversor de `GaelaniLIVE-Converter/`.
 

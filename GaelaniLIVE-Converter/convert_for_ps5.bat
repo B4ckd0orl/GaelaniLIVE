@@ -1,5 +1,5 @@
 @echo off
-rem GaelaniLIVE Engine - conversor de vídeo para la PS5. Arrastra uno o más archivos
+rem GaelaniLIVE - conversor de vídeo para la PS5. Arrastra uno o más archivos
 rem o carpetas sobre este archivo.
 rem   Cualquier formato (mkv, mov, avi, webm, mp4, 10-bit, HDR, 120 fps...) -> <nombre>_ps5.mp4
 rem   junto al original: H.264 8-bit, máximo 60 fps, tamaño por píxeles (con barras negras):

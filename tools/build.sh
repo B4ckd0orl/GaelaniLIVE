@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build GaelaniLIVE Engine (Linux / WSL).
+# Build GaelaniLIVE (Linux / WSL).
 #   ONIONHEN=~/onionHEN-beta2 PS5_PAYLOAD_SDK=~/ps5-payload-sdk tools/build.sh
 # Copies src/ into the OnionHEN v0.9.0-beta2 tree as source/gaelanilive, builds the "gaelanilive"
 # target and copies gaelanilive.elf to OUT (default: next to this repo's folder).

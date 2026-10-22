@@ -6,8 +6,10 @@ _upstream/
 __pycache__/
 *.pyc
 disasm/*.asm
+GaelaniLIVE-Converter/ffmpeg.exe
 
 tools/_*.py
+tools/_*.ps1
 
 analysis/
 tools/analyze_elf.py

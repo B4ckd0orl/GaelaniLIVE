@@ -1,5 +1,5 @@
 @echo off
-rem GaelaniLIVE Engine video converter. Drag one or more videos onto this file.
+rem GaelaniLIVE video converter. Drag one or more videos onto this file.
 rem Any format in (mkv, mov, avi, webm, mp4, 10-bit, HDR, 120 fps ...) -> <name>_ps5.mp4 next to the original:
 rem H.264 8-bit, max 60 fps, the size by the video (fitted with black bars):
 rem   up to 1080p -> 1920x1080 / up to 1440p -> 2560x1440 (2K) / bigger -> 3840x2160 (4K, bigger is scaled down).
@@ -46,6 +46,6 @@ goto next
 :done
 echo.
 echo Done. Copy the _ps5.mp4 files to /data/GaelaniLIVE/video on the PS5, to a "gaelanilive"
-echo folder on a USB drive, or upload them on the GaelaniLIVE Engine phone / PC page.
+echo folder on a USB drive, or upload them on the GaelaniLIVE phone / PC page.
 echo 4K and 2K videos play as the main wallpaper (or in PS Store only mode); for a game, use a 1080p one.
 pause
