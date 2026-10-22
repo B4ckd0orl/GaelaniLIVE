@@ -3,6 +3,15 @@
 Todos los cambios notables de GaelaniLIVE.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [v1.3.0] - 2026-10-22
+
+### Corregido
+- Auto-actualización: la descarga del release fallaba siempre con "conexión o
+  CORS" (GitHub no envía `Access-Control-Allow-Origin` en los assets del
+  release). La página descarga ahora desde `raw.githubusercontent.com` — CI
+  publica el elf en la rama `mirror` antes de cada release — y comprueba el
+  sha256 contra el digest del release antes de instalar.
+
 ## [v1.2.0] - 2026-10-22
 
 ### Corregido

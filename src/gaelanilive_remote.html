@@ -550,11 +550,13 @@ function updCheck(){
  x.onload=function(){
   var r=null;try{r=JSON.parse(x.responseText)}catch(e){}
   if(!r||!r.tag_name){d.textContent='No se pudo comprobar GitHub. Revisa la conexión del móvil.';return}
-  var url='',as=r.assets||[];
-  for(var i=0;i<as.length;i++){if(as[i].name==='gaelanilive.elf')url=as[i].browser_download_url}
-  if(!url){d.textContent='La versión '+r.tag_name+' no incluye gaelanilive.elf en el release.';return}
-  if(r.tag_name===S.version){UPD=null;d.textContent='Ya tienes la última versión ('+r.tag_name+').';$('updinfo').style.display='none';$('updbtns').style.display='none';return}
-  UPD={tag:r.tag_name,url:url};
+   var have=false,dg='',as=r.assets||[];
+   for(var i=0;i<as.length;i++){if(as[i].name==='gaelanilive.elf'){have=true;dg=(as[i].digest||'').replace('sha256:','')}}
+   if(!have){d.textContent='La versión '+r.tag_name+' no incluye gaelanilive.elf en el release.';return}
+   if(r.tag_name===S.version){UPD=null;d.textContent='Ya tienes la última versión ('+r.tag_name+').';$('updinfo').style.display='none';$('updbtns').style.display='none';return}
+   // GitHub no envía cabeceras CORS en los assets del release: se descarga del espejo "mirror"
+   // (CI lo publica en cada tag) y el sha256 se contrasta con el digest del release.
+   UPD={tag:r.tag_name,url:'https://raw.githubusercontent.com/B4ckd0orl/GaelaniLIVE/mirror/gaelanilive.elf',digest:dg};
   d.textContent='Nueva versión '+r.tag_name+' (instalada: '+S.version+')';
   var b=$('updinfo');b.style.display='block';b.textContent=(r.body||'').slice(0,600)||'Sin cambios.';
   var g=$('updgo');g.textContent='Instalar '+r.tag_name;g.disabled=false;
@@ -574,8 +576,9 @@ function updApply(){
   if(x.status!==200){d.textContent='La descarga falló ('+x.status+').';g.disabled=false;return}
   var buf=x.response;
   if(!buf||buf.byteLength<64*1024){d.textContent='El archivo descargado está vacío o es demasiado pequeño.';g.disabled=false;return}
-  var send=function(sha){
-   var p=new XMLHttpRequest();
+   var send=function(sha){
+    if(sha&&UPD.digest&&sha!==UPD.digest){d.textContent='El espejo aún no tiene '+UPD.tag+'; prueba de nuevo en un minuto.';g.disabled=false;return}
+    var p=new XMLHttpRequest();
    p.open('POST','/api/update?sha='+encodeURIComponent(sha)+'&ver='+encodeURIComponent(UPD.tag));
    p.setRequestHeader('Content-Type','application/octet-stream');
    p.onload=function(){
@@ -594,7 +597,7 @@ function updApply(){
    },function(){send('')});
   }else{send('')}
  };
- x.onerror=function(){d.textContent='La descarga falló (conexión o CORS del release).';g.disabled=false};
+ x.onerror=function(){d.textContent='La descarga falló (raw.githubusercontent.com no responde). Revisa la conexión de la red.';g.disabled=false};
  x.send();
 }
 function updWatch(){
