@@ -53,13 +53,17 @@ jobs:
 
       - name: Configure
         run: |
+          set -o pipefail
           export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
           export LLVM_CONFIG=/usr/lib/llvm-18/bin/llvm-config
           cmake -S "$ONIONHEN/source" -B "$ONIONHEN/build" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=clang-18 \
+            -DCMAKE_CXX_COMPILER=clang++-18 \
+            -DCMAKE_ASM_COMPILER=clang-18 \
             -DONIONHEN_KSTUFF_ELF="$ONIONHEN/.cache/dependencies/kstuff.elf" \
             -DPS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK" \
-            2>&1 | tail -30
+            2>&1 | tee /tmp/configure.log | tail -40
 
       - name: Build gaelanilive.elf
         run: |
