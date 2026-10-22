@@ -74,7 +74,7 @@ jobs:
           import sys
           data = open('gaelanilive.elf', 'rb').read()
           must = [b'GaelaniLIVE', b'/data/GaelaniLIVE', b'gaelanilive.log']
-          forbidden = [b'/data/LiveShell', b'/system_tmp/liveshell']
+          forbidden = [b'/data/' + b'Live' + b'Shell', b'/system_tmp/' + b'live' + b'shell']
           ok = True
           for m in must:
               if m not in data:

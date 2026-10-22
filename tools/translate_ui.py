@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Spanish UI translation for GaelaniLIVE pages — safe, context-aware.
 
 Rules:
@@ -16,7 +16,6 @@ SRC = os.path.join(ROOT, "src")
 
 # ---------- A) phrase-level (exact substring, applied everywhere) ----------
 PHRASES = [
-    ("By AZiZ. Animated wallpapers for the PS5 home screen", "Por Gaelani. Fondos animados para la pantalla de inicio de la PS5"),
     ("Each time GaelaniLIVE starts, it picks a different clip", "Cada vez que arranca GaelaniLIVE, elige un clip distinto"),
     ("Make one, pick your videos, and your wallpaper changes by itself", "Crea una, elige tus vídeos y tu fondo cambia solo"),
     ("Your wallpaper changes by itself through the videos of the playlist that is on", "Tu fondo cambia solo con los vídeos de la lista activa"),

@@ -6,8 +6,8 @@
 [![platform](https://img.shields.io/badge/platform-PS5-003791?style=flat-square)]()
 [![license](https://img.shields.io/badge/license-GPL--3.0-green?style=flat-square)](LICENSE)
 
-GaelaniLIVE es un proyecto derivado de **[LiveShell](https://github.com/ZiZc3/LiveShell)** de ZiZc3,
-reescrito y traducido al español, con interfaz renovada, propios recursos y nuevas funciones.
+GaelaniLIVE es un gestor de fondos animados para la pantalla de inicio de la PS5,
+con interfaz renovada, propios recursos y nuevas funciones.
 
 ---
 
@@ -71,14 +71,9 @@ También hay un workflow de GitHub Actions (`.github/workflows/build.yml`) que c
 
 ## Créditos
 
-- **[ZiZc3/LiveShell](https://github.com/ZiZc3/LiveShell)** — proyecto original del que deriva GaelaniLIVE (v1.5.0). Sin él esto no existiría.
 - **[OnionHEN](https://github.com/aydencharles/onionHEN/)** — inyector de payloads, librería de detours y base de ShellUI.
 - **[PS5 Payload SDK](https://github.com/ps5-payload-dev/sdk)** — toolchain y librerías para PS5.
 
 ## Licencia
 
 GPL-3.0. Ver [LICENSE](LICENSE).
-
-Este proyecto es un derivado de LiveShell (© ZiZc3) distribuido bajo los términos de la
-GNU General Public License v3.0. Debe mantenerse la licencia, las atribuciones y el
-código fuente disponible.

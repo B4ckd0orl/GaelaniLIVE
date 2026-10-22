@@ -1,4 +1,4 @@
-"""Draw the LiveShell tile icon (icon0.png, 512x512): white line art on black.
+"""Draw the app tile icon (icon0.png, 512x512): white line art on black.
 
 Two overlapping rounded screens (the home screen in front, the video layer behind it) and a
 solid play symbol. Usage: python make_icon.py <out.png>   Drawn at 4x, downscaled for smooth edges.

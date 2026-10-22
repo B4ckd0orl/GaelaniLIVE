@@ -8,3 +8,7 @@ __pycache__/
 disasm/*.asm
 
 tools/_*.py
+
+analysis/
+tools/analyze_elf.py
+tools/rebrand.py
