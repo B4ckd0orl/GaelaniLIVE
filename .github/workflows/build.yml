@@ -50,17 +50,21 @@ jobs:
           cp assets/icon0.png "$DEST/icon0.png"
           grep -q '^add_subdirectory(gaelanilive)' "$ONIONHEN/source/CMakeLists.txt" \
             || echo 'add_subdirectory(gaelanilive)' >> "$ONIONHEN/source/CMakeLists.txt"
+          # util/daemon/bootstrapper/unpacker need libcurl in the SDK homebrew dir
+          # (cheat catalog HTTP), which the SDK release zip does not ship.
+          # GaelaniLIVE builds none of them, so skip configuring those dirs.
+          sed -i -E 's|^add_subdirectory\((util|daemon|bootstrapper|unpacker)\)$|# skipped (needs libcurl): add_subdirectory(\1)|' \
+            "$ONIONHEN/source/CMakeLists.txt"
+          tail -6 "$ONIONHEN/source/CMakeLists.txt"
 
       - name: Configure
         run: |
           set -o pipefail
           export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
+          export PATH="$PS5_PAYLOAD_SDK/bin:$PATH"
           export LLVM_CONFIG=/usr/lib/llvm-18/bin/llvm-config
-          cmake -S "$ONIONHEN/source" -B "$ONIONHEN/build" -G Ninja \
+          prospero-cmake -S "$ONIONHEN/source" -B "$ONIONHEN/build" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_COMPILER=clang-18 \
-            -DCMAKE_CXX_COMPILER=clang++-18 \
-            -DCMAKE_ASM_COMPILER=clang-18 \
             -DONIONHEN_KSTUFF_ELF="$ONIONHEN/.cache/dependencies/kstuff.elf" \
             -DPS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK" \
             2>&1 | tee /tmp/configure.log | tail -40
@@ -68,6 +72,7 @@ jobs:
       - name: Build gaelanilive.elf
         run: |
           export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
+          export PATH="$PS5_PAYLOAD_SDK/bin:$PATH"
           cmake --build "$ONIONHEN/build" -j"$(nproc)" --target gaelanilive
           sha256sum "$ONIONHEN/build/bin/gaelanilive.elf"
           cp "$ONIONHEN/build/bin/gaelanilive.elf" "$GITHUB_WORKSPACE/gaelanilive.elf"
