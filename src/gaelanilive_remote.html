@@ -2,10 +2,10 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
-<title>GaelaniLIVE Engine</title>
+<title>GaelaniLIVE</title>
 <link rel="icon" href="/icon.png">
 <style>
-:root{--card:#151515;--card2:#1c1c1c;--chip:#232323;--line:#2e2e2e;--text:#fff;--dim:#8a8a8a;--faint:#4a4a4a}
+:root{--card:#151515;--card2:#1c1c1c;--chip:#232323;--line:#2e2e2e;--text:#fff;--dim:#8a8a8a;--faint:#4a4a4a;--acc:#2e7cf6;--acctx:#fff}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:#000;color:var(--text);font-family:"SST","SST Pro",-apple-system,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1.3}
 body{max-width:980px;margin:0 auto;padding:0 32px 60px}
@@ -23,7 +23,7 @@ button:focus-visible{box-shadow:0 0 0 2px var(--text)}
 .sw{flex:none;width:40px;height:24px;border-radius:12px;background:var(--chip);box-shadow:inset 0 0 0 1px var(--line);position:relative;transition:background .2s}
 .sw:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--dim);transition:transform .2s,background .2s}
 .power.on{color:var(--text)}
-.on>.sw{background:var(--text)}
+.on>.sw{background:var(--acc)}
 .on>.sw:after{transform:translateX(16px);background:#000}
 
 /* tabs */
@@ -32,7 +32,7 @@ button:focus-visible{box-shadow:0 0 0 2px var(--text)}
 .tab svg{width:17px;height:17px;flex:none}
 .tab svg,.tab span{pointer-events:none}
 @media (max-width:420px){.tabs{border-radius:16px}.tab{flex-direction:column;gap:2px;height:50px;border-radius:12px;font-size:11px}.tab svg{width:18px;height:18px}}
-.tab.on{background:var(--text);color:#000}
+.tab.on{background:var(--acc);color:var(--acctx)}
 
 h2{display:flex;align-items:baseline;gap:8px;font-size:19px;font-weight:600;margin:24px 0 12px}
 h2 span{font-size:15px;color:var(--dim);font-weight:400}
@@ -131,7 +131,7 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 .plc .t em{display:block;white-space:normal;font-style:normal;font-size:13px;color:var(--dim);margin-top:4px}
 .plc .t em.live{color:var(--text)}
 .plc .tog{flex:none;display:flex;align-items:center;padding:8px 2px}
-.plc.on .tog .sw{background:var(--text)}
+.plc.on .tog .sw{background:var(--acc)}
 .plc.on .tog .sw:after{transform:translateX(17px);background:#000}
 .ple{display:flex;flex-direction:column;gap:18px}
 .ple .sec{padding:16px 18px;border-radius:14px;background:var(--card)}
@@ -143,7 +143,7 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 .plseg button.on{background:var(--text);color:#000;box-shadow:none}
 .plsw{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;color:inherit}
 .plsw b{font-size:15px}.plsw small{display:block;font-size:12px;color:var(--dim);font-weight:400;margin-top:2px}
-.plsw.on .sw{background:var(--text)}.plsw.on .sw:after{transform:translateX(17px);background:#000}
+.plsw.on .sw{background:var(--acc)}.plsw.on .sw:after{transform:translateX(17px);background:#000}
 .plbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .plbar .sp{flex:1}
 .plbar .lnk{padding:6px 10px;border-radius:8px;font-size:13px;font-weight:700;color:var(--dim)}
@@ -172,7 +172,7 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 .urow .un{flex:1;min-width:0}
 .urow .un b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .urow .un small{display:block;font-size:12px;color:var(--dim);margin-top:2px}
-.urow.on .sw{background:var(--text)}
+.urow.on .sw{background:var(--acc)}
 .urow.on .sw:after{transform:translateX(17px);background:#000}
 .uav{position:relative;flex:none;width:44px;height:44px;border-radius:50%;object-fit:cover;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;overflow:hidden}
 .uav img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -226,7 +226,8 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 .ctl p{margin-top:10px;font-size:13px;color:var(--dim)}
 .segs{display:flex;gap:6px;flex-wrap:wrap}
 .seg{flex:1;min-width:52px;height:36px;border-radius:999px;background:var(--chip);text-align:center;font-size:14px;font-weight:600}
-.seg.on{background:var(--text);color:#000}
+.seg.on{background:var(--acc);color:var(--acctx)}
+.seg i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
 .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
 .reset{height:40px;padding:0 18px;border-radius:999px;background:var(--card);font-size:14px;font-weight:600}
 .reset.armed{background:var(--text);color:#000}
@@ -241,8 +242,6 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 .pick .name{font-size:16px;-webkit-line-clamp:1}
 .pick.on .sub{color:#555}
 .pick.on .tag{background:#000;color:#fff}
-.pick.k4{opacity:.45}
-.hint.g4k{color:#ffb454}
 .opt.dis{opacity:.45}
 .res{display:inline-block;margin-left:8px;padding:1px 6px;border-radius:5px;font-size:10.5px;font-weight:700;letter-spacing:.5px;line-height:15px;vertical-align:2px;color:#cfcfcf;box-shadow:inset 0 0 0 1px rgba(255,255,255,.32)}
 .res.r4K{background:#fff;color:#000;box-shadow:none}
@@ -377,10 +376,11 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 }
 </style></head><body>
 <div class="top">
- <div class="brand"><img src="/icon.png" alt="">GaelaniLIVE Engine<small>Remote</small></div>
+ <div class="brand"><img src="/icon.png" alt="">GaelaniLIVE<small>Remoto</small></div>
+ <span class="uwrap"><button class="uchip" id="uchip" onclick="uPop(event)" aria-label="Usuarios" style="display:none"></button><div class="upop" id="upop" style="display:none"></div></span>
  <button class="power" id="power"><span id="ptext">Fondo</span><span class="sw"></span></button>
 </div>
-<div class="tabs" id="tabs"><button class="tab on" data-t="videos"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Videos</span></button><button class="tab" data-t="playlists"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 3.5h8M2 7h8M2 10.5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 9.2v4.3l3.2-2.15z" fill="currentColor"/></svg><span>Playlists</span></button><button class="tab" data-t="games"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M4.5 4.5h7a3.5 3.5 0 0 1 3.4 4.3l-.7 2.9a1.7 1.7 0 0 1-2.9.8L9.9 11H6.1l-1.4 1.5a1.7 1.7 0 0 1-2.9-.8l-.7-2.9A3.5 3.5 0 0 1 4.5 4.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 7v2.4M3.8 8.2h2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="10.6" cy="7.6" r=".9" fill="currentColor"/><circle cx="12" cy="9" r=".9" fill="currentColor"/></svg><span>Library</span></button><button class="tab" data-t="settings"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1.5l1.3 1.8 2.2-.3.5 2.2 2 1-.9 2 .9 2-2 1-.5 2.2-2.2-.3L8 14.5l-1.3-1.8-2.2.3-.5-2.2-2-1 .9-2-.9-2 2-1 .5-2.2 2.2.3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Settings</span></button></div>
+<div class="tabs" id="tabs"><button class="tab on" data-t="videos"><svg width="16" height="16" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="1.5" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="1.5" y="9" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="9" width="5.5" height="5.5" rx="1.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Videos</span></button><button class="tab" data-t="playlists"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 3.5h8M2 7h8M2 10.5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 9.2v4.3l3.2-2.15z" fill="currentColor"/></svg><span>Listas</span></button><button class="tab" data-t="games"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M4.5 4.5h7a3.5 3.5 0 0 1 3.4 4.3l-.7 2.9a1.7 1.7 0 0 1-2.9.8L9.9 11H6.1l-1.4 1.5a1.7 1.7 0 0 1-2.9-.8l-.7-2.9A3.5 3.5 0 0 1 4.5 4.5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M5 7v2.4M3.8 8.2h2.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="10.6" cy="7.6" r=".9" fill="currentColor"/><circle cx="12" cy="9" r=".9" fill="currentColor"/></svg><span>Biblioteca</span></button><button class="tab" data-t="settings"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M8 1.5l1.3 1.8 2.2-.3.5 2.2 2 1-.9 2 .9 2-2 1-.5 2.2-2.2-.3L8 14.5l-1.3-1.8-2.2.3-.5-2.2-2-1 .9-2-.9-2 2-1 .5-2.2 2.2.3z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="8" cy="8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Ajustes</span></button></div>
 
 <div id="v-videos">
 <h2>Añadir vídeos</h2>
@@ -391,20 +391,19 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 <h2>Tus vídeos<span id="cnt"></span></h2>
 <p class="hint">Toca un vídeo para hacerlo el principal: se muestra en cada casilla sin vídeo propio.</p>
 <div class="vbar"><div class="chips" id="vchips"></div><input id="vq" class="vq" type="search" placeholder="Buscar tus vídeos" autocomplete="off" oninput="vSearch(this.value)"></div>
-<div class="vhead"><span class="h-n">Name</span><span class="col c-q">Type</span><span class="col c-w">Location</span><span class="col c-s">Size</span><span class="acts"></span></div>
+<div class="vhead"><span class="h-n">Nombre</span><span class="col c-q">Tipo</span><span class="col c-w">Ubicación</span><span class="col c-s">Tamaño</span><span class="acts"></span></div>
 <div class="list" id="list"></div>
 <div class="pages" id="vpages"></div>
 </div>
 
 <div id="plv" style="display:none">
-<h2>Playlists<span id="plcnt"></span></h2>
+<h2>Listas<span id="plcnt"></span></h2>
 <p class="hint">Tu fondo cambia solo con los vídeos de la lista activa. Solo se reproduce una lista a la vez.</p>
 <div id="plbox"></div>
 </div>
 <div id="v-games" style="display:none">
-<h2>Library<span id="gcnt"></span></h2>
-<p class="hint">Tus juegos and apps. Toca uno para darle su propio video: se reproduce mientras esa casilla está resaltada, en vez del vídeo principal.</p>
-<p class="hint g4k" id="g4k" style="display:none">Tu vídeo principal es <span class="mres">4K</span>, así los vídeos por juego se pausan: it se reproduce en todas las casillas. To para usarlos, elige a 1080p main video, or turn on <b>Solo vídeos por juego</b> (Settings, Pantalla de inicio): entonces solo los juegos con su propio vídeo muestran uno. Tus elecciones se conservan.</p>
+<h2>Biblioteca<span id="gcnt"></span></h2>
+<p class="hint">Tus juegos y apps. Toca uno para darle su propio vídeo: se reproduce mientras esa casilla está resaltada, en vez del vídeo principal.</p>
 <input class="search" id="gsearch" type="search" placeholder="Buscar juegos y apps" autocomplete="off">
 <div class="rows" id="glist"><div class="empty">Cargando tu biblioteca...</div></div>
 </div>
@@ -412,7 +411,7 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 
 <div id="v-settings" style="display:none">
 <div class="setwrap">
-<nav class="scats" id="scats"><button class="scat" data-c="home" onclick="setCat('home')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span><b>Pantalla de inicio</b><i>Dónde se muestra el vídeo</i></span></button><button class="scat" data-c="games" onclick="setCat('games')"><svg viewBox="0 0 24 24"><path d="M6 8h12a4 4 0 0 1 3.9 4.9l-1 4.3a2.4 2.4 0 0 1-4.3.9L15 16H9l-1.6 2.1a2.4 2.4 0 0 1-4.3-.9l-1-4.3A4 4 0 0 1 6 8zM7.5 11v3M6 12.5h3M16 12h.01M18 14h.01"/></svg><span><b>Games</b><i>Vídeos por juego, efecto de lanzamiento</i></span></button><button class="scat" data-c="picture" onclick="setCat('picture')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/></svg><span><b>Picture</b><i>Dim, colour, vignette, haze</i></span></button><button class="scat" data-c="sound" onclick="setCat('sound')"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><span><b>Sonido y reproducción</b><i>Volume, random start</i></span></button><button class="scat" data-c="users" onclick="setCat('users')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg><span><b>Users</b><i>Quién ve GaelaniLIVE</i></span></button><button class="scat" data-c="system" onclick="setCat('system')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span><b>System</b><i>Restablecer, apagar</i></span></button></nav>
+<nav class="scats" id="scats"><button class="scat" data-c="home" onclick="setCat('home')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span><b>Pantalla de inicio</b><i>Dónde se muestra el vídeo</i></span></button><button class="scat" data-c="games" onclick="setCat('games')"><svg viewBox="0 0 24 24"><path d="M6 8h12a4 4 0 0 1 3.9 4.9l-1 4.3a2.4 2.4 0 0 1-4.3.9L15 16H9l-1.6 2.1a2.4 2.4 0 0 1-4.3-.9l-1-4.3A4 4 0 0 1 6 8zM7.5 11v3M6 12.5h3M16 12h.01M18 14h.01"/></svg><span><b>Juegos</b><i>Vídeos por juego, efecto de lanzamiento</i></span></button><button class="scat" data-c="picture" onclick="setCat('picture')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/></svg><span><b>Imagen</b><i>Oscurecer, color, viñeta, neblina</i></span></button><button class="scat" data-c="sound" onclick="setCat('sound')"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg><span><b>Sonido y reproducción</b><i>Sonido, inicio aleatorio</i></span></button><button class="scat" data-c="users" onclick="setCat('users')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg><span><b>Usuarios</b><i>Quién ve GaelaniLIVE</i></span></button><button class="scat" data-c="system" onclick="setCat('system')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><span><b>Sistema</b><i>Restablecer, apagar</i></span></button></nav>
 <div class="cpanes">
 <section class="cpane" data-c="home">
 <h2 class="chead" onclick="foldCat(this)"><span>Pantalla de inicio</span><small>Dónde se muestra el vídeo</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
@@ -421,47 +420,55 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
  <button class="opt" id="o-pergame" onclick="pgOnly()"><div><b>Solo vídeos por juego</b><span class="d">Solo los juegos con su propio vídeo muestran uno; las demás casillas conservan el Fondo de la PS5. Sin vídeo principal.</span></div><span class="sw"></span></button>
  <button class="opt" id="o-menuhide" onclick="opt('menuhide')"><div><b>Ocultar en Ajustes</b><span class="d">Fondo normal de la PS5 en Ajustes y apps del sistema.</span></div><span class="sw"></span></button>
  <button class="opt" id="o-storeonly" onclick="opt('storeonly')"><div><b>Solo PS Store</b><span class="d">El vídeo se muestra solo en la casilla de PlayStation Store. Las demás conservan el estilo normal de la PS5.</span></div><span class="sw"></span></button>
- <button class="opt" id="o-storeclip" onclick="openPicker('NPXS40047')" style="display:none"><div><b>Vídeo de PS Store</b><span class="d" id="storeclipname">Vídeo principal</span></div><span class="tag">Change</span></button>
+ <button class="opt" id="o-storeclip" onclick="openPicker('NPXS40047')" style="display:none"><div><b>Vídeo de PS Store</b><span class="d" id="storeclipname">Vídeo principal</span></div><span class="tag">Cambiar</span></button>
  <button class="opt" id="o-parallax" onclick="opt('parallax')"><div><b>Parallax</b><span class="d">El vídeo se desplaza un poco al moverte entre juegos.</span></div><span class="sw"></span></button>
 </div>
 </section>
 <section class="cpane" data-c="games">
-<h2 class="chead" onclick="foldCat(this)"><span>Games</span><small>Vídeos por juego, efecto de lanzamiento</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
+<h2 class="chead" onclick="foldCat(this)"><span>Juegos</span><small>Vídeos por juego, efecto de lanzamiento</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
 <p class="hint">Qué ocurre con los juegos: sus propios vídeos, iniciando uno y volviendo.</p>
 <div class="opts">
- <button class="opt" id="o-gamevideos" onclick="opt('gamevideos')"><div><b>Vídeos por juego</b><span class="d">Los juegos y apps reproducen el vídeo que les diste en Biblioteca. Off: todas las casillas usan el vídeo principal (tus elecciones se conservan).</span></div><span class="sw"></span></button>
- <button class="opt" id="o-gamehide" onclick="opt('gamehide')"><div><b>Ocultar mientras hay un juego abierto</b><span class="d">Con un juego abierto en segundo plano, la pantalla de inicio conserva the game"sw"
- <div class="opt" style="display:block"><div><b>Efecto de lanzamiento de juego</b><span class="d">Cómo se va el fondo al iniciar un juego. Por defecto: el fundido normal. Cinematic: a empuje lento y luego el fundido. Fundido lento: la imagen se mantiene a moment, then fades slowly.</span></div><div class="segs" id="lfxctl" style="margin-top:12px"></div></div>
+ <button class="opt" id="o-gamevideos" onclick="opt('gamevideos')"><div><b>Vídeos por juego</b><span class="d">Los juegos y apps reproducen el vídeo que les diste en Biblioteca. No: todas las casillas usan el vídeo principal (tus elecciones se conservan).</span></div><span class="sw"></span></button>
+ <button class="opt" id="o-gamehide" onclick="opt('gamehide')"><div><b>Ocultar mientras hay un juego abierto</b><span class="d">Con un juego abierto en segundo plano, la pantalla de inicio conserva el arte del juego; el vídeo vuelve al cerrarlo.</span></div><span class="sw"></span></button>
+ <div class="opt" style="display:block"><div><b>Efecto de lanzamiento de juego</b><span class="d">Cómo se va el fondo al iniciar un juego. Por defecto: el fundido normal. Cinemático: un empuje lento y luego el fundido. Fundido lento: la imagen se mantiene un momento y luego se funde lentamente.</span></div><div class="segs" id="lfxctl" style="margin-top:12px"></div></div>
  <button class="opt" id="o-resume" onclick="opt('resume')"><div><b>Reanudar tras un juego</b><span class="d">Cuando vuelves de un juego, el vídeo continúa donde estaba en vez de empezar de nuevo.</span></div><span class="sw"></span></button>
  </div>
 </section>
 <section class="cpane" data-c="picture">
-<h2 class="chead" onclick="foldCat(this)"><span>Picture</span><small>Dim, colour, vignette, haze</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
+<h2 class="chead" onclick="foldCat(this)"><span>Imagen</span><small>Oscurecer, color, viñeta, neblina</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
 <p class="hint">Cómo se ve el vídeo detrás de la pantalla de inicio.</p>
 <div class="opts">
- <div class="ctl"><b>Dim</b><div class="segs" id="dimctl"><button class="seg" data-v="0">Off</button><button class="seg" data-v="25">25</button><button class="seg" data-v="50">50</button><button class="seg" data-v="60">60</button><button class="seg" data-v="70">70</button><button class="seg" data-v="80">80</button></div></div>
- <div class="ctl"><b>Vignette</b><div class="segs look" data-l="2" data-k="vignette"><button class="seg" data-v="0">Off</button><button class="seg" data-v="1">Light</button><button class="seg" data-v="2">Strong</button></div></div>
- <div class="ctl"><b>Haze</b><div class="segs look" data-l="3" data-k="haze"><button class="seg" data-v="0">Off</button><button class="seg" data-v="1">Light</button><button class="seg" data-v="2">Strong</button></div></div>
- <div class="ctl"><b>Capa de color</b><div class="segs tints" id="tintctl"></div><p>Tíñe la imagen. Con más Oscurecer se vuelve una gradación más oscura.</p></div>
+ <div class="ctl"><b>Oscurecer</b><div class="segs" id="dimctl"><button class="seg" data-v="0">No</button><button class="seg" data-v="25">25</button><button class="seg" data-v="50">50</button><button class="seg" data-v="60">60</button><button class="seg" data-v="70">70</button><button class="seg" data-v="80">80</button></div></div>
+ <div class="ctl"><b>Viñeta</b><div class="segs look" data-l="2" data-k="vignette"><button class="seg" data-v="0">No</button><button class="seg" data-v="1">Suave</button><button class="seg" data-v="2">Fuerte</button></div></div>
+ <div class="ctl"><b>Neblina</b><div class="segs look" data-l="3" data-k="haze"><button class="seg" data-v="0">No</button><button class="seg" data-v="1">Suave</button><button class="seg" data-v="2">Fuerte</button></div></div>
+  <div class="ctl"><b>Capa de color</b><div class="segs tints" id="tintctl"></div><p>Tíñe la imagen. Con más Oscurecer se vuelve una gradación más oscura.</p></div>
+  <div class="ctl"><b>Color de acento</b><div class="segs" id="themectl"></div></div>
 </div>
 </section>
 <section class="cpane" data-c="sound">
-<h2 class="chead" onclick="foldCat(this)"><span>Sonido y reproducción</span><small>Volume, random start</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
+<h2 class="chead" onclick="foldCat(this)"><span>Sonido y reproducción</span><small>Sonido, inicio aleatorio</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
 <p class="hint">Sonido para vídeos que lo tienen y qué clip se reproduce primero.</p>
 <div class="opts">
- <div class="ctl"><div class="segs" id="volctl"><button class="seg" data-v="0">Mute</button><button class="seg" data-v="25">25%</button><button class="seg" data-v="50">50%</button><button class="seg" data-v="75">75%</button><button class="seg" data-v="100">100%</button></div>
+ <div class="ctl"><div class="segs" id="volctl"><button class="seg" data-v="0">Silencio</button><button class="seg" data-v="25">25%</button><button class="seg" data-v="50">50%</button><button class="seg" data-v="75">75%</button><button class="seg" data-v="100">100%</button></div>
   <p>Para vídeos con sonido. La música propia de la PS5 se calla mientras suena uno.</p></div>
  <button class="opt" id="o-shuffle" onclick="opt('shuffle')"><div><b>Vídeo aleatorio al inicio</b><span class="d">Cada vez que arranca GaelaniLIVE, elige un clip distinto.</span></div><span class="sw"></span></button>
 </div>
 </section>
 <section class="cpane" data-c="users">
-<h2 class="chead" onclick="foldCat(this)"><span>Users</span><small>Quién ve GaelaniLIVE</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
-<p class="hint">GaelaniLIVE se reproduce solo para los usuarios activados; the others see the normal Fondo de la PS5. Cada usuario conserva su propio fondo.</p>
+<h2 class="chead" onclick="foldCat(this)"><span>Usuarios</span><small>Quién ve GaelaniLIVE</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
+<p class="hint">GaelaniLIVE se reproduce solo para los usuarios activados; las demás ven el Fondo normal de la PS5. Cada usuario conserva su propio fondo.</p>
 <div class="opts" id="userlist"></div>
 </section>
 <section class="cpane" data-c="system">
-<h2 class="chead" onclick="foldCat(this)"><span>System</span><small>Restablecer, apagar</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
-<p class="hint">Start de nuevo o detener GaelaniLIVE hasta la próxima vez que lo cargues.</p>
+<h2 class="chead" onclick="foldCat(this)"><span>Sistema</span><small>Actualizaciones, restablecer, apagar</small><svg class="chev" width="14" height="14" viewBox="0 0 14 14"><path d="M3.5 5.25L7 8.75l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></h2>
+<p class="hint">Restablece o detén GaelaniLIVE hasta la próxima vez que lo cargues.</p>
+<div class="opts" style="margin-bottom:12px">
+ <button class="opt" onclick="updCheck()"><div><b>Actualizaciones</b><span class="d">Comprueba la última versión en GitHub, la descarga y la instala sola.</span></div><span class="tag" id="updver">…</span></button>
+ <button class="opt" onclick="openDiag()"><div><b>Diagnóstico</b><span class="d">Ver los registros (gaelanilive.log, shellui.log, inject.log) y el estado de reproducción.</span></div><span class="tag">Abrir</span></button>
+</div>
+<p class="hint" id="updst">Versión instalada: <span id="aboutver">…</span>. Pulsa «Actualizaciones» para comprobar.</p>
+<p class="hint" id="updinfo" style="display:none"></p>
+<div class="btns" id="updbtns" style="display:none"><button class="reset" id="updgo" onclick="updApply()">Instalar</button></div>
 <div class="btns"><button class="reset" id="reset">Restablecer ajustes</button><button class="reset" id="shutdown">Apagar GaelaniLIVE</button></div>
 </section>
 </div>
@@ -469,12 +476,16 @@ h2 span{font-size:15px;color:var(--dim);font-weight:400}
 </div>
 
 <div class="modal" id="gm" style="display:none"><div class="sheet">
- <div class="gmhead"><h2 id="gmt">Fondo para esta casilla</h2><div class="btns"><button class="reset" id="gmmain">Reset</button><button class="reset" id="gmcancel">Cancel</button></div></div>
+ <div class="gmhead"><h2 id="gmt">Fondo para esta casilla</h2><div class="btns"><button class="reset" id="gmmain">Restablecer</button><button class="reset" id="gmcancel">Cancelar</button></div></div>
  <p class="hint">Elige el vídeo que se reproduce al resaltar esta casilla en la pantalla de inicio.</p>
  <div id="gml"></div>
 </div></div>
+<div class="modal" id="dg" style="display:none"><div class="sheet">
+ <div class="gmhead"><h2>Registro de GaelaniLIVE</h2><div class="btns"><button class="reset" onclick="diagCopy()">Copiar</button><button class="reset" onclick="diagRefresh()">Actualizar</button><button class="reset" onclick="$('dg').style.display='none'">Cerrar</button></div></div>
+ <pre id="dgb" style="max-height:70vh;overflow:auto;background:#0b0b0b;color:#d6d6d6;padding:12px 14px;border-radius:10px;font-size:12px;line-height:1.45;white-space:pre-wrap;word-break:break-all;margin:0"></pre>
+</div></div>
 <div class="toast" id="toast"></div>
-<div class="cvbox" id="cvbox" style="display:none"><b id="cvname"></b><span class="cvt" id="cvtext"></span><div class="bar"><i id="cvbar"></i></div><div class="cvrow"><span>Mantén esta página abierta hasta que termine.</span><button class="act" onclick="cvCancel()">Cancel</button></div></div>
+<div class="cvbox" id="cvbox" style="display:none"><b id="cvname"></b><span class="cvt" id="cvtext"></span><div class="bar"><i id="cvbar"></i></div><div class="cvrow"><span>Mantén esta página abierta hasta que termine.</span><button class="act" onclick="cvCancel()">Cancelar</button></div></div>
 <script>
 var S=null,busy=false,uploading=0,queue=[],tab='videos';
 function $(i){return document.getElementById(i)}
@@ -484,7 +495,11 @@ function nice(n){var t=bare(n).replace(/[-_.]+/g,' ').replace(/\b(\w+ com|com|wa
 function clipName(path){return nice(path.split('/').pop())}
 function mb(b){return b>=1e9?(b/1e9).toFixed(1)+' GB':Math.max(1,Math.round(b/1e6))+' MB'}
 function toast(t){var e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(e.t);e.t=setTimeout(function(){e.style.display='none'},2800)}
-function get(u,cb){var x=new XMLHttpRequest();x.open('GET',u);x.onload=function(){var r;try{r=JSON.parse(x.responseText)}catch(e){r={ok:false}}cb(r)};x.onerror=function(){busy=false;toast('GaelaniLIVE Engine no se está ejecutando en la PS5')};x.send()}
+function get(u,cb){var x=new XMLHttpRequest();x.open('GET',u);x.onload=function(){var r;try{r=JSON.parse(x.responseText)}catch(e){r={ok:false}}cb(r)};x.onerror=function(){busy=false;toast('GaelaniLIVE no se está ejecutando en la PS5')};x.send()}
+// Diagnóstico: /api/logtail (plain text), Copiar y refrescar.
+function openDiag(){$('dg').style.display='flex';diagRefresh()}
+function diagRefresh(){$('dgb').textContent='Cargando...';var x=new XMLHttpRequest();x.open('GET','/api/logtail');x.onload=function(){$('dgb').textContent=x.responseText||'(vacío)'};x.onerror=function(){$('dgb').textContent='No se pudo leer el registro (¿GaelaniLIVE está activo?)'};x.send()}
+function diagCopy(){var t=$('dgb').textContent,r=document.createRange();r.selectNodeContents($('dgb'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);var ok=false;try{ok=document.execCommand('copy')}catch(e){}if(ok&&navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t);s.removeAllRanges();toast(ok?'Registro copiado':'Selecciona el texto y cópialo')}
 // The main wallpaper's resolution for the texts: "4K" or "2K" (a big one; its badge).
 function mainRes(){var i=cur();return i>=0&&(S.videos[i].res=='2K'||S.videos[i].res=='4K')?S.videos[i].res:'4K'}
 function cur(){if(!S)return -1;for(var i=0;i<S.videos.length;i++)if(S.videos[i].path==S.current)return i;return -1}
@@ -502,10 +517,10 @@ function render(){
    +(v.why?'<span class="pc bad" title="No se reproducirá en la PS5"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>'
      :'<span class="pc ok" title="Se reproduce en la PS5"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2.5 6.2l2.3 2.3 4.7-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>')
    +'<button class="vmain" onclick="play('+n+')"><div class="info"><div class="name"><span class="nt">'+esc(t)+'</span>'+(on?'<span class="now">Reproduciendo</span>':'')+'</div>'
-   +'<div class="sub">'+(v.why?'<span class="why" title="'+esc(v.why)+'">Won&#39;t play \u00b7 '+esc(whyShort(v.why))+'</span>':'<span>'+esc(v.name)+'</span>')+'</div></div></button>'
+   +'<div class="sub">'+(v.why?'<span class="why" title="'+esc(v.why)+'">No se reproducirá \u00b7 '+esc(whyShort(v.why))+'</span>':'<span>'+esc(v.name)+'</span>')+'</div></div></button>'
    +'<span class="col c-q">'+(v.res?'<span class="res r'+v.res+'">'+v.res+'</span>':'')+(v.snd?'<span class="snd" title="Tiene sonido"><svg width=\'14\' height=\'14\' viewBox=\'0 0 16 16\'><path d=\'M2.5 6h2.2L8 3.3v9.4L4.7 10H2.5z\' fill=\'currentColor\'/><path d=\'M10.6 5.6a3.2 3.2 0 0 1 0 4.8M12.4 3.9a5.6 5.6 0 0 1 0 8.2\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.4\' stroke-linecap=\'round\'/></svg></span>':'')+'</span>'
    +'<span class="col c-w">'+esc(v.where)+'</span><span class="col c-s">'+mb(v.size)+'</span>'
-   +'<span class="acts">'+(cvCan(v)?'<button class="act conv" id="cv'+n+'" onclick="convert('+n+')"'+(CV?' disabled':'')+'>'+(CV&&CV.n==n?'Converting':'Convertirlo')+'</button>':'')
+   +'<span class="acts">'+(cvCan(v)?'<button class="act conv" id="cv'+n+'" onclick="convert('+n+')"'+(CV?' disabled':'')+'>'+(CV&&CV.n==n?'Convirtiendo':'Convertirlo')+'</button>':'')
    +'<button class="fav'+(v.fav?' on':'')+'" onclick="fav('+n+')" aria-label="Favorito"><svg width="17" height="17" viewBox="0 0 16 16"><path d="M8 13.6S2 10 2 5.9A3 3 0 0 1 8 4.4a3 3 0 0 1 6 1.5C14 10 8 13.6 8 13.6z" fill="'+(v.fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>'
    +'<button class="act del" id="del'+n+'" onclick="del('+n+')">Borrar</button></span></div>';
  });
@@ -513,14 +528,94 @@ function render(){
  $('list').innerHTML=h||'<div class="empty">Aún no hay vídeos. Añade uno arriba.</div>';
  var vp='';if(vpages>1)for(var q=0;q<vpages;q++)vp+='<button class="pg'+(q==vpage?' on':'')+'" onclick="vPage('+q+')">'+(q+1)+'</button>';$('vpages').innerHTML=vp;
  // settings
- sw('o-gamevideos',S.gamevideos!==false);$('g4k').style.display=S.main4k?'block':'none';var mr=document.querySelectorAll('.mres');for(var m1=0;m1<mr.length;m1++)mr[m1].textContent=mainRes();$('o-gamevideos').classList.toggle('dis',!!S.main4k||S.mainvideo===false);sw('o-pergame',S.mainvideo===false);sw('o-shuffle',S.shuffle);sw('o-resume',!!S.resume);segRow('tintctl',TINTS,S.tint||0,'tintSet');$('lfxctl').innerHTML=LFX.map(function(n,m){return'<button class="seg'+((S.launchfx||0)==m?' on':'')+'" onclick="lfxSet('+m+')">'+n+'</button>'}).join('');renderUsers();renderUchip();sw('o-gamehide',S.gamehide);
+ sw('o-gamevideos',S.gamevideos!==false);$('o-gamevideos').classList.toggle('dis',S.mainvideo===false);sw('o-pergame',S.mainvideo===false);sw('o-shuffle',S.shuffle);sw('o-resume',!!S.resume);segRow('tintctl',TINTS,S.tint||0,'tintSet');applyTheme();themeRow();$('lfxctl').innerHTML=LFX.map(function(n,m){return'<button class="seg'+((S.launchfx||0)==m?' on':'')+'" onclick="lfxSet('+m+')">'+n+'</button>'}).join('');renderUsers();renderUchip();sw('o-gamehide',S.gamehide);
  sw('o-menuhide',S.menuhide);sw('o-storeonly',S.storeonly);sw('o-parallax',S.parallax);
  $('o-storeclip').style.display=S.storeonly?'':'none';var sc=gameMap()['NPXS40047'];$('storeclipname').textContent=sc?clipName(sc):'Vídeo principal';
  segs('volctl',S.volume==null?100:S.volume);segs('dimctl',S.dim||0);
  var lk=document.querySelectorAll('.segs.look');for(var a=0;a<lk.length;a++){var lv=(S.looks||[])[+lk[a].getAttribute('data-l')]||0,bs=lk[a].querySelectorAll('.seg');for(var b=0;b<bs.length;b++)bs[b].className='seg'+(+bs[b].getAttribute('data-v')==lv?' on':'')}
  if(tab=='games')renderGames();
 }
-function poll(){if(busy)return;get('/api/state',function(s){if(s.videos){S=s;render();grabCovers()}})}
+function poll(){if(busy)return;get('/api/state',function(s){if(s.videos){S=s;render();updVer();grabCovers()}})}
+// Self-update from the phone: fetch the release on GitHub, POST the elf to /api/update, the
+// payload swaps itself and answers again on the same port in a couple of seconds.
+var UPD=null;
+function updVer(){var e=$('aboutver');if(e)e.textContent=(S&&S.version)?S.version:'…';var g=$('updver');if(g)g.textContent=(S&&S.version)?S.version:'…'}
+function updCheck(){
+ if(!S)return;
+ var d=$('updst');d.textContent='Comprobando GitHub...';
+ var x=new XMLHttpRequest();
+ x.open('GET','https://api.github.com/repos/B4ckd0orl/GaelaniLIVE/releases/latest');
+ x.setRequestHeader('Accept','application/vnd.github+json');
+ x.timeout=15000;
+ x.onload=function(){
+  var r=null;try{r=JSON.parse(x.responseText)}catch(e){}
+  if(!r||!r.tag_name){d.textContent='No se pudo comprobar GitHub. Revisa la conexión del móvil.';return}
+  var url='',as=r.assets||[];
+  for(var i=0;i<as.length;i++){if(as[i].name==='gaelanilive.elf')url=as[i].browser_download_url}
+  if(!url){d.textContent='La versión '+r.tag_name+' no incluye gaelanilive.elf en el release.';return}
+  if(r.tag_name===S.version){UPD=null;d.textContent='Ya tienes la última versión ('+r.tag_name+').';$('updinfo').style.display='none';$('updbtns').style.display='none';return}
+  UPD={tag:r.tag_name,url:url};
+  d.textContent='Nueva versión '+r.tag_name+' (instalada: '+S.version+')';
+  var b=$('updinfo');b.style.display='block';b.textContent=(r.body||'').slice(0,600)||'Sin cambios.';
+  var g=$('updgo');g.textContent='Instalar '+r.tag_name;g.disabled=false;
+  $('updbtns').style.display='block';
+ };
+ x.onerror=x.ontimeout=function(){d.textContent='No se pudo comprobar GitHub. Revisa la conexión del móvil.'};
+ x.send();
+}
+function updApply(){
+ if(!UPD)return;
+ var d=$('updst'),g=$('updgo');
+ g.disabled=true;
+ d.textContent='Descargando '+UPD.tag+'...';
+ var x=new XMLHttpRequest();x.open('GET',UPD.url);x.responseType='arraybuffer';
+ x.onprogress=function(e){if(e.lengthComputable&&e.total>0)d.textContent='Descargando '+UPD.tag+': '+Math.round(e.loaded*100/e.total)+'%'};
+ x.onload=function(){
+  if(x.status!==200){d.textContent='La descarga falló ('+x.status+').';g.disabled=false;return}
+  var buf=x.response;
+  if(!buf||buf.byteLength<64*1024){d.textContent='El archivo descargado está vacío o es demasiado pequeño.';g.disabled=false;return}
+  var send=function(sha){
+   var p=new XMLHttpRequest();
+   p.open('POST','/api/update?sha='+encodeURIComponent(sha)+'&ver='+encodeURIComponent(UPD.tag));
+   p.setRequestHeader('Content-Type','application/octet-stream');
+   p.onload=function(){
+    var r=null;try{r=JSON.parse(p.responseText)}catch(e){}
+    if(!r||!r.ok){d.textContent=(r&&r.error)?r.error:'No se pudo instalar la actualización.';g.disabled=false;return}
+    d.textContent='Instalado. El payload se reinicia...';
+    updWatch();
+   };
+   p.onerror=function(){d.textContent='No se pudo enviar el elf a la PS5.';g.disabled=false};
+   p.send(buf);
+  };
+  if(window.crypto&&crypto.subtle&&crypto.subtle.digest){
+   crypto.subtle.digest('SHA-256',buf).then(function(h){
+    var v=new Uint8Array(h),s='';for(var i=0;i<v.length;i++)s+=('0'+v[i].toString(16)).slice(-2);
+    send(s);
+   },function(){send('')});
+  }else{send('')}
+ };
+ x.onerror=function(){d.textContent='La descarga falló (conexión o CORS del release).';g.disabled=false};
+ x.send();
+}
+function updWatch(){
+ var d=$('updst'),t=0;
+ var iv=setInterval(function(){
+  t+=2;
+  var x=new XMLHttpRequest();x.open('GET','/api/state');
+  x.onload=function(){
+   var s=null;try{s=JSON.parse(x.responseText)}catch(e){}
+   if(s&&s.version&&S&&s.version!==S.version){
+    clearInterval(iv);
+    toast('GaelaniLIVE '+s.version+' ya está en marcha');
+    S=s;render();updVer();grabCovers();
+    d.textContent='Actualizado a '+s.version+'.';
+    return;
+   }
+   if(t>=60){clearInterval(iv);d.textContent='Vuelve a cargar GaelaniLIVE en la PS5 para terminar la actualización.'}
+  };
+  x.send();
+ },2000);
+}
 // 4K / 2K videos without a cover (the PS5's own window cannot decode them for its banner): the Discover cover first,
 // else one frame grabbed here, 1280x720 JPG, kept on the console. One at a time, once per video, in the background.
 var grabTried={},grabBusy=false;
@@ -532,13 +627,13 @@ function grabFrame(n){var el=document.createElement('video'),over=false,done=fun
  el.onseeked=function(){try{var c=document.createElement('canvas');c.width=1280;c.height=720;var x=c.getContext('2d'),r=Math.max(1280/el.videoWidth,720/el.videoHeight),w=el.videoWidth*r,h=el.videoHeight*r;
   x.drawImage(el,(1280-w)/2,(720-h)/2,w,h);c.toBlob(function(b){if(!b||b.size<3000){done();return}var q=new XMLHttpRequest();q.open('POST','/thumb?i='+n);q.onloadend=function(){done();poll()};q.send(b)},'image/jpeg',.85)}catch(e){done()}};
  el.onerror=done;setTimeout(done,60000);el.src='/video?i='+n}
-function play(n){if(busy||!S||(S.videos[n]&&S.videos[n].path==S.current&&S.enabled))return;busy=true;toast('Switching to '+nice(S.videos[n].name));get('/api/select?i='+n,function(r){busy=false;toast(r.ok?'Ahora el vídeo principal en la PS5':(r.error||'Eso no ha funcionado'));poll()})}
+function play(n){if(busy||!S||(S.videos[n]&&S.videos[n].path==S.current&&S.enabled))return;busy=true;toast('Cambiando a '+nice(S.videos[n].name));get('/api/select?i='+n,function(r){busy=false;toast(r.ok?'Ahora es el vídeo principal':(r.error||'Eso no ha funcionado'));poll()})}
 function arm(b,label){if(b.className.indexOf('armed')>=0)return true;b.className+=' armed';var old=b.textContent;b.textContent=label;setTimeout(function(){if(b.parentNode){b.className=b.className.replace(' armed','');b.textContent=old}},3000);return false}
 // Favorite: pinned at the top of the list until un-favorited (the console keeps the list).
 function fav(n){var v=S.videos[n];if(!v||busy)return;var on=!v.fav;busy=true;
  get('/api/fav?i='+n+'&v='+(on?1:0),function(r){busy=false;toast(r.ok?(on?'Favorite: se queda arriba':'Quitado de favoritos'):(r.error||'Eso no ha funcionado'));poll()})}
-function del(n){var b=$('del'+n);if(!b||!S||!arm(b,'Delete?'))return;
- busy=true;get('/api/delete?i='+n,function(r){busy=false;toast(r.ok?'Deleted':(r.error||'Eso no ha funcionado'));poll();if(gamesLoaded)loadGames()})}
+function del(n){var b=$('del'+n);if(!b||!S||!arm(b,'¿Eliminar?'))return;
+ busy=true;get('/api/delete?i='+n,function(r){busy=false;toast(r.ok?'Eliminado':(r.error||'Eso no ha funcionado'));poll();if(gamesLoaded)loadGames()})}
 $('power').onclick=function(){if(!S||busy)return;var on=!S.enabled;S.enabled=on;busy=true;render();get(on?'/api/on':'/api/off',function(r){busy=false;if(!r.ok)S.enabled=!on;toast(r.ok?(on?'Fondo encendido':'Fondo apagado'):(r.error||'Eso no ha funcionado'));render();poll()})};
 // Videos per game only = the main video off ("mainvideo" false); it turns Videos per game on.
 // Users: GaelaniLIVE per console user (GitHub issue #9).
@@ -551,18 +646,18 @@ function renderUchip(){var b=$('uchip');if(!b||!S)return;var u=uNow();b.style.di
 function renderUpop(){var p=$('upop'),us=S&&S.users||[];if(!p)return;
  var k=JSON.stringify(us);if(p.getAttribute('data-k')==k)return;p.setAttribute('data-k',k);
  p.innerHTML='<div class="uh">GaelaniLIVE para</div>'+us.map(function(u){return'<button class="urow'+(u.on?' on':'')+'" onclick="userOn('+u.id+')">'+userAv(u)
-  +'<span class="un"><b>'+esc(u.name)+'</b><small>'+(u.now?'Conectado \u00b7 ':'')+(u.on?'Fondo propio':'Normal PS5 background')+'</small></span><span class="sw"></span></button>'}).join('')}
+  +'<span class="un"><b>'+esc(u.name)+'</b><small>'+(u.now?'Conectado \u00b7 ':'')+(u.on?'Fondo propio':'Fondo normal de la PS5')+'</small></span><span class="sw"></span></button>'}).join('')}
 function uPop(e){if(e)e.stopPropagation();uOpen=!uOpen;var p=$('upop');p.style.display=uOpen?'block':'none';p.removeAttribute('data-k');renderUchip();
  if(uOpen){renderUpop();var f=p.querySelector('.urow');if(f&&f.focus)f.focus()}else{var b=$('uchip');if(b&&b.focus)b.focus()}}
 document.addEventListener('click',function(e){if(uOpen&&!e.target.closest('.uwrap'))uPop()});
 document.addEventListener('keydown',function(e){if(uOpen&&(e.key=='Escape'||e.keyCode==27)){e.preventDefault();uPop()}});
 function userOn(id){if(!S)return;var u=(S.users||[]).filter(function(x){return x.id==id})[0];if(!u)return;
  if(u.on&&(S.users||[]).filter(function(x){return x.on}).length<2){toast('Al menos un usuario debe mantener GaelaniLIVE.');return}
- u.on=!u.on;render();get('/api/user?id='+id+'&on='+(u.on?1:0),function(r){toast(u.on?'GaelaniLIVE está activado para '+u.name:'Off for '+u.name+': the normal PS5 background');poll()})}
+ u.on=!u.on;render();get('/api/user?id='+id+'&on='+(u.on?1:0),function(r){toast(u.on?'GaelaniLIVE está activado para '+u.name:u.name+': fondo normal de la PS5');poll()})}
 function userAv(u){return'<span class="uav">'+esc((u.name||'?').charAt(0).toUpperCase())+'<img src="/useravatar?id='+u.id+'" alt="" onerror="this.remove()"></span>'}
 function renderUsers(){var b=$('userlist');if(!b||!S)return;var us=S.users||[];
  b.innerHTML=us.length?us.map(function(u){return'<button class="opt user'+(u.on?' on':'')+'" onclick="userOn('+u.id+')">'+userAv(u)
-  +'<div><b>'+esc(u.name)+(u.now?'<span class="unow">Conectado</span>':'')+'</b><span class="d">'+(u.on?'Reproduce GaelaniLIVE (su propio fondo)':'Normal PS5 background')+'</span></div><span class="sw"></span></button>'}).join('')
+  +'<div><b>'+esc(u.name)+(u.now?'<span class="unow">Conectado</span>':'')+'</b><span class="d">'+(u.on?'Reproduce GaelaniLIVE (su propio fondo)':'Fondo normal de la PS5')+'</span></div><span class="sw"></span></button>'}).join('')
   :'<div class="empty">Los usuarios aparecen aquí cuando se conectan.</div>'}
 // ---- Playlists: named sets of videos the wallpaper changes through by itself (one plays at a time) ----
 var PL=[],plLoaded=false,plEdit=-1,plDraft=null,plRes='all',PLE=[1,5,15,30,60];
@@ -576,7 +671,7 @@ var plBad={},plKey='';
 function plCov(n,label){var v=n>=0&&S.videos[n],src=v?(v.thumb?'/thumb?i='+n+'&s='+v.size:'/vidcover?i='+n+'&p='+encodeURIComponent(v.name)):'';
  if(src&&plBad[src])src='';
  return'<span class="plcov"><span>'+esc(label)+'</span>'+(src?'<img src="'+src+'" alt="" loading="lazy" onerror="plBad[this.getAttribute(\'src\')]=1;this.remove()">':'')+'</span>'}
-function plOn(i){var p=PL[i];if(!p)return;if(!p.on&&!plCount(p)){toast('Añade primero un vídeo a esta lista');return}var on=!p.on;PL.forEach(function(q){q.on=false});p.on=on;renderPl();plSave(on?p.name+' is playing':p.name+' stopped')}
+function plOn(i){var p=PL[i];if(!p)return;if(!p.on&&!plCount(p)){toast('Añade primero un vídeo a esta lista');return}var on=!p.on;PL.forEach(function(q){q.on=false});p.on=on;renderPl();plSave(on?p.name+' se está reproduciendo':p.name+' se detuvo')}
 function plNew(){plEdit=PL.length;plDraft={name:'Mi lista'+(PL.length?' '+(PL.length+1):''),on:true,every:5,shuffle:false,videos:[],fresh:true};plRes='all';renderPl()}
 function plOpen(i){plEdit=i;plDraft=JSON.parse(JSON.stringify(PL[i]));plRes='all';renderPl()}
 function plCancel(){plEdit=-1;plDraft=null;renderPl()}
@@ -586,7 +681,7 @@ function plKeep(){plName();var d=plDraft;d.name=(d.name||'').replace(/^\s+|\s+$/
  if(!d.videos.length){toast('Elige al menos un vídeo');return}
  if(d.fresh){PL.forEach(function(q){q.on=false});d.on=true}delete d.fresh;  // a new playlist plays right away
  if(d.on)PL.forEach(function(q,k){if(k!=plEdit)q.on=false});
- PL[plEdit]=d;plEdit=-1;plDraft=null;renderPl();plSave(d.on?d.name+' is playing: el fondo cambia cada '+d.every+' min':'Saved '+d.name)}
+ PL[plEdit]=d;plEdit=-1;plDraft=null;renderPl();plSave(d.on?d.name+' se está reproduciendo: el fondo cambia cada '+d.every+' min':'Guardado: '+d.name)}
 function plName(){var n=$('plname');if(n&&plDraft)plDraft.name=n.value}
 function plEvery(m){plName();plDraft.every=m;renderPl()}
 function plShuf(){plName();plDraft.shuffle=!plDraft.shuffle;renderPl()}
@@ -596,20 +691,20 @@ function plPool(){return(S&&S.videos||[]).filter(function(v){return!v.why&&(plRe
 function plAll(){plName();var has={};plDraft.videos.forEach(function(v){has[v]=1});plPool().forEach(function(v){if(!has[v.path])plDraft.videos.push(v.path)});renderPl()}
 function plClear(){plName();var p={};plPool().forEach(function(v){p[v.path]=1});plDraft.videos=plDraft.videos.filter(function(v){return!p[v]});renderPl()}
 function plPick(n){plName();var v=S.videos[n],at=plDraft.videos.indexOf(v.path);if(at>=0)plDraft.videos.splice(at,1);else plDraft.videos.push(v.path);
- var b=document.querySelector('[data-pv="'+n+'"]');if(b){b.className='plt'+(at>=0?'':' on');b.querySelector('.ck').textContent=at>=0?'':'\u2713'}var c=$('plsel');if(c)c.textContent=plDraft.videos.length+' selected'}
+ var b=document.querySelector('[data-pv="'+n+'"]');if(b){b.className='plt'+(at>=0?'':' on');b.querySelector('.ck').textContent=at>=0?'':'\u2713'}var c=$('plsel');if(c)c.textContent=plDraft.videos.length+(plDraft.videos.length==1?' seleccionado':' seleccionados')}
 function renderPl(){var box=$('plbox');if(!box||!S)return;$('plcnt').textContent=PL.length||'';
  // only when something shown changed: a rebuild reloads every cover (they flickered on each state poll)
  var k=JSON.stringify([PL,plDraft,plRes,plEdit,S&&S.plbak])+S.videos.map(function(v){return v.path+(v.thumb?1:0)+(v.why?1:0)}).join('|');if(k==plKey)return;plKey=k;
  if(plDraft){var d=plDraft,idx={};d.videos.forEach(function(v){idx[v]=1});
   var vids=S.videos.map(function(v,n){return[v,n]}).filter(function(x){return!x[0].why&&(plRes=='all'||plResOf(x[0])==plRes)});
   box.innerHTML='<div class="ple">'
-   +'<div class="plfoot top"><button class="reset armed" onclick="plKeep()">'+(d.fresh?'Create and play':'Save')+'</button><button class="reset" onclick="plCancel()">Cancelar</button><span class="sp"></span>'
+   +'<div class="plfoot top"><button class="reset armed" onclick="plKeep()">'+(d.fresh?'Crear y reproducir':'Guardar')+'</button><button class="reset" onclick="plCancel()">Cancelar</button><span class="sp"></span>'
    +(d.fresh?'':'<button class="reset pldel" onclick="plDelete()">Borrar lista</button>')+'</div>'
    +'<div class="sec"><div class="lab">Nombre</div><input id="plname" class="plname" maxlength="40" value="'+esc(d.name)+'" oninput="plName()"></div>'
    +'<div class="sec"><div class="lab">Change every</div><div class="plseg">'+PLE.map(function(m){return'<button class="'+(d.every==m?'on':'')+'" onclick="plEvery('+m+')">'+m+' min</button>'}).join('')+'</div>'
    +'<div style="height:14px"></div><button class="plsw'+(d.shuffle?' on':'')+'" onclick="plShuf()"><span><b>Mezclar</b><small>Reproducir los vídeos en orden aleatorio</small></span><span class="sw"></span></button></div>'
-   +'<div class="sec"><div class="plbar"><span class="lab" style="margin:0">Vídeos</span><span class="note" id="plsel" style="margin:0 6px">'+d.videos.length+' selected</span><span class="sp"></span>'
-   +[['all','All'],['4K','4K'],['1080p','1080p']].map(function(r){return'<button class="chip'+(plRes==r[0]?' on':'')+'" onclick="plFilter(\''+r[0]+'\')">'+r[1]+'</button>'}).join('')
+   +'<div class="sec"><div class="plbar"><span class="lab" style="margin:0">Vídeos</span><span class="note" id="plsel" style="margin:0 6px">'+d.videos.length+(d.videos.length==1?' seleccionado':' seleccionados')+'</span><span class="sp"></span>'
+   +[['all','Todos'],['4K','4K'],['1080p','1080p']].map(function(r){return'<button class="chip'+(plRes==r[0]?' on':'')+'" onclick="plFilter(\''+r[0]+'\')">'+r[1]+'</button>'}).join('')
    +'<button class="lnk" onclick="plAll()">Seleccionar todo</button><button class="lnk" onclick="plClear()">Clear</button></div>'
    +'<div class="plgrid">'+(vids.length?vids.map(function(x){var v=x[0],on=!!idx[v.path],t=nice(v.name);return'<button class="plt'+(on?' on':'')+'" data-pv="'+x[1]+'" onclick="plPick('+x[1]+')">'+plCov(x[1],t)
     +(v.res?'<span class="res r'+v.res+'">'+v.res+'</span>':'')+'<span class="ck">'+(on?'\u2713':'')+'</span><span class="nm">'+esc(t)+'</span></button>'}).join(''):'<div class="empty">No hay vídeos aquí.</div>')+'</div></div>'
@@ -622,20 +717,26 @@ function renderPl(){var box=$('plbox');if(!box||!S)return;$('plcnt').textContent
     +'<button class="tog" onclick="plOn('+i+')" aria-label="Encendido / apagado"><span class="sw"></span></button></div>'}).join('')+'</div>'
    :'<div class="empty"><b>Aún no hay listas</b>Crea una, elige tus vídeos y tu fondo cambia solo.</div>')+(S&&S.plbak?'<div class="plundo"><button class="lnk" onclick="plUndo()">\u21b6 Deshacer el último cambio</button></div>':'')}
 // Game launch effect: Fade / Dive / Pull back.
-var LFX=['Default','Cinematic','Fundido lento'];  // Default = the normal fade
+var LFX=['Predeterminado','Cinemático','Fundido lento'];  // Predeterminado = el fundido normal
 function lfxSet(m){if(!S)return;S.launchfx=m;render();get('/api/launchfx?m='+m,function(){toast('Efecto de lanzamiento de juego: '+LFX[m]);poll()})}
 function lfxNext(){if(S)lfxSet(((S.launchfx||0)+1)%LFX.length)}
 // Picture -> Colour layer (a tint of the dim layer).
-var TINTS=['Default','Warm','Cool','Rose','Teal','Violet'];
+var TINTS=['Predeterminado','Cálido','Frío','Rosa','Turquesa','Violeta'];
 function tintSet(v){if(!S)return;S.tint=v;render();get('/api/tint?v='+v,function(){poll()})}
+// Accent colour: 8 presets; the --acc variables drive tabs, switches and active segments.
+var THEMES=[['Azul','#2e7cf6','#fff'],['Cian','#22d3ee','#06232a'],['Verde','#3ddc84','#06281c'],['Ámbar','#fbbf24','#2a1d00'],['Naranja','#fb923c','#2a1400'],['Rosa','#f472b6','#3d0a24'],['Violeta','#8b5cf6','#fff'],['Rojo','#ef4444','#fff']];
+var THEME_NAMES=THEMES.map(function(t){return t[0]});
+function applyTheme(){var t=THEMES[(S&&S.theme)||0]||THEMES[0],r=document.documentElement.style;r.setProperty('--acc',t[1]);r.setProperty('--acctx',t[2])}
+function themeRow(){segRow('themectl',THEME_NAMES,(S&&S.theme)||0,'themeSet');var b=$('themectl');if(!b)return;var t=b.querySelectorAll('.seg');for(var i=0;i<t.length;i++){var p=THEMES[i]||THEMES[0];t[i].innerHTML='<i style="background:'+p[1]+'"></i>'+p[0]}}
+function themeSet(v){if(!S)return;S.theme=v;applyTheme();themeRow();get('/api/theme?v='+v,function(){poll()})}
 function segRow(id,vals,cur,fn){var b=$(id);if(!b)return;var h=vals.map(function(n,i){return'<button class="seg'+(cur==i?' on':'')+'" onclick="'+fn+'('+i+')">'+n+'</button>'}).join('');if(b.innerHTML!=h)b.innerHTML=h}
 function pgOnly(){if(!S)return;var on=S.mainvideo!==false;S.mainvideo=!on;if(on)S.gamevideos=true;render();
- get('/api/set?k=mainvideo&v='+(on?0:1),function(r){toast(r.ok?(on?'Solo vídeos por juego: las demás casillas conservan el PS5 background':'El vídeo principal vuelve a todas las casillas'):(r.error||'Eso no ha funcionado'));poll()})}
-function opt(k){if(!S)return;if(k=='gamevideos'&&S.main4k){toast('Los vídeos por juego se pausan mientras tu fondo principal es '+mainRes()+'.');return}if(k=='gamevideos'&&S.mainvideo===false){toast('«Solo vídeos por juego» necesita esos activados. Desactívalo primero.');return}var on=k=='gamevideos'?S[k]===false:!S[k];S[k]=on;render();
- get('/api/set?k='+k+'&v='+(on?1:0),function(r){toast(r.ok?'Saved':(r.error||'Eso no ha funcionado'));poll()})}
-$('volctl').onclick=function(e){var v=e.target.getAttribute&&e.target.getAttribute('data-v');if(v==null||!S)return;S.volume=+v;render();get('/api/volume?v='+v,function(r){toast(r.ok?(v=='0'?'Muted':'Sound '+v+'%'):'Eso no ha funcionado')})};
+  get('/api/set?k=mainvideo&v='+(on?0:1),function(r){toast(r.ok?(on?'Solo vídeos por juego: las demás casillas conservan el fondo de la PS5':'El vídeo principal vuelve a todas las casillas'):(r.error||'Eso no ha funcionado'));poll()})}
+function opt(k){if(!S)return;if(k=='gamevideos'&&S.mainvideo===false){toast('«Solo vídeos por juego» necesita esos activados. Desactívalo primero.');return}var on=k=='gamevideos'?S[k]===false:!S[k];S[k]=on;render();
+ get('/api/set?k='+k+'&v='+(on?1:0),function(r){toast(r.ok?'Guardado':(r.error||'Eso no ha funcionado'));poll()})}
+$('volctl').onclick=function(e){var v=e.target.getAttribute&&e.target.getAttribute('data-v');if(v==null||!S)return;S.volume=+v;render();get('/api/volume?v='+v,function(r){toast(r.ok?(v=='0'?'Silenciado':'Sonido '+v+'%'):'Eso no ha funcionado')})};
 $('dimctl').onclick=function(e){var v=e.target.getAttribute&&e.target.getAttribute('data-v');if(v==null||!S)return;S.dim=+v;render();get('/api/dim?v='+v,function(r){toast(r.ok?(v=='0'?'Oscurecer apagado':'Fondo oscurecido '+v+'%'):'Eso no ha funcionado')})};
-var lkb=document.querySelectorAll('.segs.look');for(var c=0;c<lkb.length;c++)lkb[c].onclick=function(e){var v=e.target.getAttribute&&e.target.getAttribute('data-v');if(v==null||!S)return;var l=+this.getAttribute('data-l'),k=this.getAttribute('data-k'),t=this.parentNode.querySelector('b').textContent;if(!S.looks)S.looks=[0,0,0,0];S.looks[l]=+v;render();get('/api/look?k='+k+'&v='+v,function(r){toast(r.ok?t+': '+['off','light','strong'][+v]:'Eso no ha funcionado')})};
+var lkb=document.querySelectorAll('.segs.look');for(var c=0;c<lkb.length;c++)lkb[c].onclick=function(e){var v=e.target.getAttribute&&e.target.getAttribute('data-v');if(v==null||!S)return;var l=+this.getAttribute('data-l'),k=this.getAttribute('data-k'),t=this.parentNode.querySelector('b').textContent;if(!S.looks)S.looks=[0,0,0,0];S.looks[l]=+v;render();get('/api/look?k='+k+'&v='+v,function(r){toast(r.ok?t+': '+['No','Suave','Fuerte'][+v]:'Eso no ha funcionado')})};
 $('reset').onclick=function(){if(!arm(this,'Pulsa de nuevo para restablecer'))return;get('/api/reset',function(r){toast(r.ok?'Ajustes restablecidos':(r.error||'Eso no ha funcionado'));poll()})};
 $('shutdown').onclick=function(){if(!arm(this,'Pulsa de nuevo para apagar'))return;get('/api/shutdown',function(){toast('GaelaniLIVE se está apagando. La pantalla de inicio se reinicia en un momento.')})};
 
@@ -667,14 +768,14 @@ function openPicker(tid){
  if(!S)return;gameNow=tid;var c=gameMap()[tid]||'',h='';
  $('gmt').textContent='Fondo para '+gameName(tid);
  S.videos.forEach(function(v,n){var on=v.path==c;
-  h+='<button class="pick'+(on?' on':'')+(v.k4&&gameNow!='NPXS40047'?' k4':'')+'" onclick="pickGame('+n+')"><div class="info"><div class="name">'+esc(nice(v.name))+'</div><div class="sub">'+(v.k4&&gameNow!='NPXS40047'?'<span>'+(v.res||'4K')+': solo fondo principal</span>':'<span>'+esc(v.where)+'</span><span>'+mb(v.size)+'</span>')+'</div></div>'
-   +(on?'<span class="tag">Chosen</span>':v.k4&&gameNow!='NPXS40047'?'<span class="tag">'+(v.res||'4K')+'</span>':'')+'</button>'});
+  h+='<button class="pick'+(on?' on':'')+'" onclick="pickGame('+n+')"><div class="info"><div class="name">'+esc(nice(v.name))+'</div><div class="sub"><span>'+esc(v.where)+'</span><span>'+mb(v.size)+'</span></div></div>'
+   +(on?'<span class="tag">Elegido</span>':'')+'</button>'});
  $('gml').innerHTML=h||'<div class="empty">Aún no hay vídeos. Añade uno en Vídeos.</div>';
  $('gm').style.display='flex';
 }
 function closePicker(){$('gm').style.display='none';gameNow=''}
-function pickGame(n){var tid=gameNow,v=S.videos[n];if(v&&v.k4&&tid!='NPXS40047'){toast((v.res||'4K')+' los vídeos funcionan solo como fondo principal. Elige un vídeo de 1080p para este juego.');return}get('/api/gamebg?tid='+tid+'&i='+n,function(r){toast(r.ok?nice(v.name)+' set for '+gameName(tid):(r.error||'Eso no ha funcionado'));closePicker();poll();loadGames()})}
-$('gmmain').onclick=function(){var tid=gameNow;get('/api/gamebg?tid='+tid+'&i=-1',function(r){toast(r.ok?gameName(tid)+' uses the main video':'Eso no ha funcionado');closePicker();poll();loadGames()})};
+function pickGame(n){var tid=gameNow,v=S.videos[n];if(!v){return}get('/api/gamebg?tid='+tid+'&i='+n,function(r){toast(r.ok?nice(v.name)+': fondo de '+gameName(tid):(r.error||'Eso no ha funcionado'));closePicker();poll();loadGames()})}
+$('gmmain').onclick=function(){var tid=gameNow;get('/api/gamebg?tid='+tid+'&i=-1',function(r){toast(r.ok?gameName(tid)+' usa el vídeo principal':'Eso no ha funcionado');closePicker();poll();loadGames()})};
 $('gmcancel').onclick=closePicker;
 $('gm').onclick=function(e){if(e.target===this)closePicker()};
 
@@ -691,8 +792,8 @@ function next(){
  var x=new XMLHttpRequest();x.open('POST','/api/upload?name='+encodeURIComponent(f.name));
  x.upload.onprogress=function(e){if(e.lengthComputable){var p=Math.round(e.loaded*100/e.total);pct.textContent=p+'%';bar.style.width=p+'%'}};
  x.onload=function(){var r={};try{r=JSON.parse(x.responseText)}catch(e){}
-  if(r.ok){pct.textContent='Done';bar.style.width='100%';setTimeout(function(){job.parentNode&&job.parentNode.removeChild(job)},4000)}
-  else{job.className='job err';pct.textContent=r.error||'Failed'}
+  if(r.ok){pct.textContent='Hecho';bar.style.width='100%';setTimeout(function(){job.parentNode&&job.parentNode.removeChild(job)},4000)}
+  else{job.className='job err';pct.textContent=r.error||'Error'}
   uploading=0;poll();next()};
  x.onerror=function(){job.className='job err';pct.textContent='Conexión perdida';uploading=0;next()};
  x.send(f);
@@ -716,8 +817,8 @@ function foldCat(h){if(innerWidth>760)return;var sec=h.parentNode,was=sec.classL
 // ---- Convert it: the browser converts a clip the PS5 will not play (ffmpeg.wasm, loaded on first use) ----
 var CV=null,FF=null;
 var CVLIB={ff:'https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd/',util:'https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js',core:'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/'};
-function cvCan(v){return !!v.why&&!/cut off/i.test(v.why)}
-function cvRemux(v){return /Fragmented/i.test(v.why)}
+function cvCan(v){return !!v.why&&!/está cortado/i.test(v.why)}
+function cvRemux(v){return /fragmentad/i.test(v.why)}
 function cvShow(t,pct){$('cvbox').style.display='block';$('cvtext').textContent=t;if(pct!=null)$('cvbar').style.width=Math.max(0,Math.min(100,pct))+'%'}
 function cvEnd(msg){var c=CV;CV=null;$('cvbox').style.display='none';if(msg)toast(msg);if(c&&c.x)try{c.x.abort()}catch(e){}render()}
 function cvCancel(){if(!CV)return;CV.stop=true;if(FF)try{FF.terminate()}catch(e){}FF=null;cvEnd('Conversión cancelada')}
@@ -736,27 +837,27 @@ function cvPut(name,data){return new Promise(function(ok,bad){var x=new XMLHttpR
  x.onload=function(){var r={};try{r=JSON.parse(x.responseText)}catch(e){}r.ok?ok():bad(new Error(r.error||'put'))};x.onerror=function(){bad(new Error('put'))};x.send(new Blob([data],{type:'video/mp4'}))})}
 function convert(n){var v=S&&S.videos[n];if(!v||CV||!cvCan(v))return;
  if(v.size>1.6e9){toast('Demasiado grande para convertir en el navegador (máx. unos 1,6 GB)');return}
- var remux=cvRemux(v),name=v.path.split('/').pop(),usb=!/^Internal/.test(v.where),big=v.res=='4K'||v.res=='2K'||/Too big/i.test(v.why);
+ var remux=cvRemux(v),name=v.path.split('/').pop(),usb=!/^Internal/.test(v.where),big=v.res=='4K'||v.res=='2K'||/Demasiado grande/i.test(v.why);
  CV={n:n,stop:false};$('cvname').textContent=nice(v.name);$('cvbar').style.width='0';render();
  var t0=Date.now();
  cvLoad().then(function(f){if(CV.stop)throw 0;return cvGet(n,v).then(function(d){if(CV.stop)throw 0;return f.writeFile('in.mp4',d).then(function(){return f})})})
- .then(function(f){if(CV.stop)throw 0;cvShow(remux?'Re-packing...':'Converting... 0%',20);
-  f.on('progress',function(e){if(CV&&!remux)cvShow('Converting... '+Math.round(Math.max(0,Math.min(1,e.progress))*100)+'%',20+65*Math.max(0,Math.min(1,e.progress)))});
+  .then(function(f){if(CV.stop)throw 0;cvShow(remux?'Reempaquetando...':'Convirtiendo... 0%',20);
+   f.on('progress',function(e){if(CV&&!remux)cvShow('Convirtiendo... '+Math.round(Math.max(0,Math.min(1,e.progress))*100)+'%',20+65*Math.max(0,Math.min(1,e.progress)))});
   var a=remux?['-i','in.mp4','-map','0','-c','copy','-movflags','+faststart','out.mp4']
    :['-i','in.mp4','-map','0:v:0','-map','0:a:0?','-c:v','libx264','-preset','veryfast','-crf','20','-pix_fmt','yuv420p','-profile:v','high'].concat(big?[]:['-level','4.1'],
      ['-vf',big?"scale='min(3840,iw)':'min(2160,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2":"scale='min(1920,iw)':'min(1080,ih)':force_original_aspect_ratio=decrease:force_divisible_by=2",'-c:a','aac','-b:a','160k','-movflags','+faststart','out.mp4']);
   return f.exec(a).then(function(rc){if(rc!==0)throw new Error('conv');return f.readFile('out.mp4')}).then(function(out){f.deleteFile('in.mp4').catch(function(){});f.deleteFile('out.mp4').catch(function(){});return out})})
  .then(function(out){if(CV.stop)throw 0;if(!out||out.length<1000)throw new Error('conv');return cvPut(name,out)})
- .then(function(){cvEnd('Convertido en '+Math.max(1,Math.round((Date.now()-t0)/1000))+' s'+(usb?'. The copia nueva está en la consola; puedes eliminar el de '+v.where:''));poll()})
- .catch(function(e){if(e===0||!CV)return;var m=e&&e.message;window.__cverr=String(e&&(e.stack||e));if(window.console)console.error('convert:',e);
-  cvEnd(m=='load'?'No se pudo obtener el conversor (necesita internet en este phone / PC)':m=='get'?'No se pudo tomar el vídeo de la PS5':m=='put'?'No se pudo devolver a la PS5':m=='conv'?'El conversor no pudo leer este archivo':(m||'Eso no ha funcionado'))})}
+  .then(function(){cvEnd('Convertido en '+Math.max(1,Math.round((Date.now()-t0)/1000))+' s'+(usb?'. La copia nueva está en la consola; puedes eliminar el de '+v.where:''));poll()})
+  .catch(function(e){if(e===0||!CV)return;var m=e&&e.message;window.__cverr=String(e&&(e.stack||e));if(window.console)console.error('convert:',e);
+   cvEnd(m=='load'?'No se pudo obtener el conversor (necesita internet en este móvil o PC)':m=='get'?'No se pudo tomar el vídeo de la PS5':m=='put'?'No se pudo devolver a la PS5':m=='conv'?'El conversor no pudo leer este archivo':(m||'Eso no ha funcionado'))})}
 // Videos: filter chips + search (the list stays one clean table however full it gets).
 var vfilt='all',vq='';
-function whyShort(w){return String(w).split(' - ')[0].replace(/^The file is cut off$/,'Cortado')}
+function whyShort(w){return String(w).split(' - ')[0].replace(/^El archivo está cortado$/,'Cortado')}
 function vOk(v,f){return f=='all'||(f=='ok'&&!v.why)||(f=='bad'&&!!v.why)||(f=='int'&&/^Internal/.test(v.where))||(f=='usb'&&/^USB/.test(v.where))}
 function vShown(){var q=vq.toLowerCase(),out=[];S.videos.forEach(function(v,n){if(vOk(v,vfilt)&&(!q||(nice(v.name)+' '+v.name).toLowerCase().indexOf(q)>=0))out.push(n)});return out}
 function vChips(){var c={all:0,ok:0,bad:0,int:0,usb:0};S.videos.forEach(function(v){for(var k in c)if(vOk(v,k))c[k]++});
- var h=[['all','All'],['ok','Plays'],['bad','Won\u2019t play'],['int','Internal'],['usb','USB']].filter(function(x){return x[0]=='all'||c[x[0]]>0||vfilt==x[0]})
+ var h=[['all','Todos'],['ok','Se reproducen'],['bad','No se reproducen'],['int','Interno'],['usb','USB']].filter(function(x){return x[0]=='all'||c[x[0]]>0||vfilt==x[0]})
   .map(function(x){return'<button class="chip'+(vfilt==x[0]?' on':'')+(x[0]=='bad'?' warn':'')+'" onclick="vFilt(\''+x[0]+'\')">'+x[1]+'<i>'+c[x[0]]+'</i></button>'}).join('');
  var b=$('vchips');if(b.innerHTML!=h)b.innerHTML=h;var show=S.videos.length>0;$('vq').style.display=S.videos.length>8?'':'none';document.querySelector('.vhead').style.display=show?'':'none';b.style.display=show?'':'none'}
 function vFilt(f){vfilt=f;vpage=0;render()}

@@ -27,8 +27,11 @@ target_link_directories(gaelanilive_shellui PUBLIC "${ONIONHEN_PS5_STUB_DIR}")
 target_link_libraries(gaelanilive_shellui PUBLIC onion_payload onion_proc onion_platform onion_detour SceNotification kernel_sys)
 onion_strip_debug(gaelanilive_shellui)
 
-add_executable(gaelanilive ${D_CWD}/gaelanilive_daemon.cpp ${D_CWD}/gaelanilive_web.cpp ${D_CWD}/gaelanilive_tile.cpp ${D_CWD}/zstd_decompress.c)
+add_executable(gaelanilive ${D_CWD}/gaelanilive_daemon.cpp ${D_CWD}/gaelanilive_web.cpp ${D_CWD}/gaelanilive_tile.cpp ${D_CWD}/gaelanilive_update.cpp ${D_CWD}/zstd_decompress.c)
 set_target_properties(gaelanilive PROPERTIES OUTPUT_NAME "gaelanilive.elf")
+if(NOT DEFINED GAELANILIVE_VERSION)
+	set(GAELANILIVE_VERSION "0.0.0-dev") # CI passes -DGAELANILIVE_VERSION=<release tag>
+endif()
 target_link_options(gaelanilive PRIVATE "-Wl,--gc-sections")
 add_dependencies(gaelanilive gaelanilive_shellui NineS onion_proc onion_platform onion_elfldr)
 set_source_files_properties(${D_CWD}/gaelanilive_daemon.cpp PROPERTIES OBJECT_DEPENDS "${ONIONHEN_OUT_BIN}/gaelanilive_shellui.elf")
@@ -38,7 +41,8 @@ target_compile_definitions(gaelanilive PRIVATE
 	GAELANILIVE_SHELLUI_ELF="${ONIONHEN_OUT_BIN}/gaelanilive_shellui.elf"
 	GAELANILIVE_PAGE_HTML="${D_CWD}/gaelanilive_page.html"
 	GAELANILIVE_REMOTE_HTML="${D_CWD}/gaelanilive_remote.html"
-	GAELANILIVE_ICON_PNG="${D_CWD}/icon0.png")
+	GAELANILIVE_ICON_PNG="${D_CWD}/icon0.png"
+	GAELANILIVE_VERSION="${GAELANILIVE_VERSION}")
 target_include_directories(gaelanilive PRIVATE
 	"${PROJECT_ROOT}/libonion_proc/include"
 	"${PROJECT_ROOT}/libonion_platform/include"

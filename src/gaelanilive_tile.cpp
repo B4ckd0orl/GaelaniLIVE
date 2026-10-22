@@ -56,7 +56,7 @@ std::string manifest() {
 	std::string names;
 	for (const char* lang : {"en-US", "en-GB", "fr-FR", "de-DE", "es-ES", "it-IT", "pt-BR", "ru-RU", "ja-JP",
 	                         "ko-KR", "zh-Hans", "ar-AE"}) {
-		names += std::string(",\n    \"") + lang + "\": { \"titleName\": \"GaelaniLIVE Engine\" }";
+		names += std::string(",\n    \"") + lang + "\": { \"titleName\": \"GaelaniLIVE\" }";
 	}
 	return std::string("{\n  \"titleId\": \"") + kTitleId + "\",\n" +
 	       "  \"applicationCategoryType\": 65536,\n" +

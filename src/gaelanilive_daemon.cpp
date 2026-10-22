@@ -129,6 +129,7 @@ bool        g_store_only = false; // video only while the PS Store tile is highl
 bool        g_parallax   = false; // nudge the video when moving between home tiles
 bool        g_auto_match = false; // Auto-match (off by default, user)
 int         g_tint       = 0;     // Picture -> Colour: 0 neutral, 1 warm, 2 cool, 3 rose, 4 teal, 5 violet
+int         g_theme      = 0;     // accent colour preset 0..7 (the page's look)
 int         g_launchfx   = 0;     // game launch effect: 0 fade, 1 dive, 2 pull back (ShellUI reads launchfx.txt)
 bool        g_resume     = false; // Resume after a game (experimental, off by default): ShellUI reads resume.txt: a note when Discover has wallpapers for a game without its own video
 bool        g_game_running = false;
@@ -296,7 +297,7 @@ bool ensure_mount_point() {
 // /system_ex does not show there, so the window is opened in every sandbox too.
 void mount_window_everywhere(const std::string& folder) {
 	if (!ensure_mount_point()) {
-		notify("GaelaniLIVE Engine no pudo preparar su carpeta de vídeo. Registro: /data/GaelaniLIVE/gaelanilive.log");
+		notify("GaelaniLIVE no pudo preparar su carpeta de vídeo. Registro: /data/GaelaniLIVE/gaelanilive.log");
 		return;
 	}
 	if (!mount_window_at(kMountPoint, folder.c_str())) {
@@ -408,6 +409,8 @@ void load_config() {
 			g_off_users = line.substr(9);
 		} else if (line.rfind("tint=", 0) == 0) {
 			g_tint = std::max(0, std::min(5, atoi(line.c_str() + 5)));
+		} else if (line.rfind("theme=", 0) == 0) {
+			g_theme = std::max(0, std::min(7, atoi(line.c_str() + 6)));
 		} else if (line.rfind("launchfx=", 0) == 0) {
 			g_launchfx = std::max(0, std::min(2, atoi(line.c_str() + 9)));
 		} else if (line.rfind("resume=", 0) == 0) {
@@ -441,7 +444,7 @@ void load_config() {
 
 void save_config() {
 	write_text(kConfigFile, std::string("enabled=") + (g_enabled ? "1" : "0") + "\nvideo=" + g_current + "\ndim=" + std::to_string(g_dim) + "\nvolume=" + std::to_string(g_volume) + "\nlooks=" + looks_text() +
-	                            "\nshuffle=" + (g_shuffle ? "1" : "0") + "\nmainvideo=1\npergameonly=" + (g_main_video ? "0" : "1") + "\ngamevideos=" + (g_game_videos ? "1" : "0") + "\ngamepause=" + (g_game_pause ? "1" : "0") + "\nmenuhide=" + (g_menu_hide ? "1" : "0") + "\nstoreonly=" + (g_store_only ? "1" : "0") + "\nparallax=" + (g_parallax ? "1" : "0") + "\nautomatch=" + (g_auto_match ? "1" : "0") + "\nresume=" + (g_resume ? "1" : "0") + "\nlaunchfx=" + std::to_string(g_launchfx) + "\ntint=" + std::to_string(g_tint) + "\noffusers=" + g_off_users + "\ngamehide=" + (g_game_hide ? "1" : "0") + "\n");
+	                            "\nshuffle=" + (g_shuffle ? "1" : "0") + "\nmainvideo=1\npergameonly=" + (g_main_video ? "0" : "1") + "\ngamevideos=" + (g_game_videos ? "1" : "0") + "\ngamepause=" + (g_game_pause ? "1" : "0") + "\nmenuhide=" + (g_menu_hide ? "1" : "0") + "\nstoreonly=" + (g_store_only ? "1" : "0") + "\nparallax=" + (g_parallax ? "1" : "0") + "\nautomatch=" + (g_auto_match ? "1" : "0") + "\nresume=" + (g_resume ? "1" : "0") + "\nlaunchfx=" + std::to_string(g_launchfx) + "\ntint=" + std::to_string(g_tint) + "\ntheme=" + std::to_string(g_theme) + "\noffusers=" + g_off_users + "\ngamehide=" + (g_game_hide ? "1" : "0") + "\n");
 }
 
 // ---- telling ShellUI what to play ------------------------------------------------------------
@@ -651,7 +654,7 @@ bool apply_inner(std::string& error) {
 	if (g_injected) {
 		write_text(kPathFile, "off\n");
 		if (!wait_shellui_stopped(8000)) {
-			error = "The home screen did not release the old video";
+			error = "La pantalla de inicio no soltó el vídeo anterior";
 			log("apply: ShellUI still busy (%s)", shellui_status().c_str());
 			return false;
 		}
@@ -741,7 +744,7 @@ pid_t inject_shellui() {
 		return 0;
 	}
 	if (kOnionGuard && (onion_daemon_answers() || read_pid_file(kOnionToolbox) == pid)) {
-		notify("GaelaniLIVE Engine no puede ejecutarse mientras OnionHEN está en marcha.");
+		notify("GaelaniLIVE no puede ejecutarse mientras OnionHEN está en marcha.");
 		return -1;
 	}
 	if (read_pid_file(kOurMarker) == pid) {
@@ -754,7 +757,7 @@ pid_t inject_shellui() {
 	log("injecting into SceShellUI pid %d", static_cast<int>(pid));
 	if (!Inject_Toolbox(static_cast<int>(pid), gaelanilive_shellui_elf_start)) {
 		log("injection FAILED");
-		notify("GaelaniLIVE Engine no pudo iniciar (falló la inyección).");
+		notify("GaelaniLIVE no pudo iniciar (falló la inyección).");
 		return -1;
 	}
 	write_text(kOurMarker, std::to_string(pid));
@@ -1000,9 +1003,9 @@ void* after_start_thread(void*) {
 	}
 	const int rc = install_tile();
 	if (rc == 1) {
-		notify("GaelaniLIVE Engine se añadió a tu pantalla de inicio.");
+		notify("GaelaniLIVE se añadió a tu pantalla de inicio.");
 	} else if (rc < 0) {
-		notify_plain("GaelaniLIVE Engine: no se pudo añadir el icono a la pantalla de inicio (revisa gaelanilive.log).");
+		notify_plain("GaelaniLIVE: no se pudo añadir el icono a la pantalla de inicio (revisa gaelanilive.log).");
 	}
 	return nullptr;
 }
@@ -1015,6 +1018,63 @@ void start_thread(void* (*fn)(void*)) {
 }
 
 } // namespace
+
+// ---- /api/logtail: the last lines of every log (the Diagnóstico tab / PC support) ----
+
+std::string logtail_text() {
+	auto tail = [](const char* path, size_t max_bytes) -> std::string {
+		const int fd = open(path, O_RDONLY);
+		if (fd < 0) {
+			return {};
+		}
+		const off_t end = lseek(fd, 0, SEEK_END);
+		off_t       from = end > static_cast<off_t>(max_bytes) ? end - static_cast<off_t>(max_bytes) : 0;
+		if (from > 0) { // begin at the next whole line
+			lseek(fd, from, SEEK_SET);
+			char        skip[160];
+			const ssize_t got = read(fd, skip, sizeof(skip) - 1);
+			if (got > 0) {
+				skip[got] = 0;
+				const char* nl = strchr(skip, '\n');
+				if (nl != nullptr) {
+					from += static_cast<off_t>(nl + 1 - skip);
+				}
+			}
+		}
+		lseek(fd, from, SEEK_SET);
+		std::string out(max_bytes, '\0');
+		const ssize_t n = read(fd, &out[0], max_bytes);
+		close(fd);
+		out.resize(n > 0 ? static_cast<size_t>(n) : 0);
+		return out;
+	};
+	struct Section {
+		const char* title;
+		const char* path;
+		size_t      max;
+	};
+	const Section sections[] = {
+	    {"gaelanilive.log", kLogFile, 96 * 1024},
+	    {"shellui.log (copia)", kUiLogFile, 64 * 1024},
+	    {"shellui.log (activo)", kShellUiLog, 32 * 1024},
+	    {"inject.log", "/data/GaelaniLIVE/inject.log", 32 * 1024},
+	    {"status.txt", kStatusFile, 700},
+	    {"video.txt", kPathFile, 700},
+	};
+	std::string out = "== GaelaniLIVE diagnostico ==\n";
+	for (const Section& s : sections) {
+		out += std::string("\n== ") + s.title + " ==\n";
+		std::string text = tail(s.path, s.max);
+		if (text.empty()) {
+			text = "(no existe o vacio)\n";
+		}
+		out += text;
+		if (text.back() != '\n') {
+			out += '\n';
+		}
+	}
+	return out;
+}
 
 // ---- shared API ------------------------------------------------------------------------------
 
@@ -1225,6 +1285,7 @@ State get_state() {
 		st.launchfx   = g_launchfx;
 		st.pl_bak     = exists(kPlaylistsBak);
 		st.tint       = g_tint;
+		st.theme      = g_theme;
 		for (const Playlist& p : g_playlists) {
 			if (p.on) {
 				st.playlist = p.name;
@@ -1242,28 +1303,26 @@ void save_user_wall(const std::string& path); // Users: the signed-in user's own
 
 bool select_video(const std::string& path, std::string& error) {
 	if (!exists(path.c_str())) {
-		error = "That video is gone";
+		error = "Ese vídeo ya no existe";
 		return false;
 	}
 	if (refuse_4k(path, error)) {
 		return false;
 	}
+	// Never let a clip the PS5 cannot decode become the wallpaper: it would only show a black screen.
+	const std::string why = clip_problem(path);
+	if (!why.empty()) {
+		error = why;
+		notify(("GaelaniLIVE: este vídeo no se reproducirá. " + why).c_str());
+		log("select refused: %s (%s)", path.c_str(), why.c_str());
+		return false;
+	}
 	std::lock_guard<std::mutex> lock(g_ctl);
-	const bool was_4k = clip_is_big(g_current);
 	g_current  = path;
 	g_enabled  = true;
 	g_cycle_at = time(nullptr);
 	save_user_wall(path); // this user's own wallpaper
 	save_config(); // g_override stays: a highlighted game's own clip wins over the main video
-	if (g_main_video && clip_is_big(path)) {
-		g_override.clear(); // 4K main: every tile shows it (videos per game pause)
-		if (!was_4k && g_game_videos && !read_text("/data/GaelaniLIVE/games.txt", 64 * 1024).empty()) {
-			notify((clip_res(path) + " fondo principal: los vídeos por juego se pausan").c_str()); // 4K or 2K
-			notify("Vuelven con un fondo principal de 1080p.");
-		}
-	} else if (g_main_video && was_4k && g_game_videos && !read_text("/data/GaelaniLIVE/games.txt", 64 * 1024).empty()) {
-		notify("Los vídeos por juego están de vuelta");
-	}
 	return apply_locked(error);
 }
 
@@ -1308,6 +1367,13 @@ void set_tint(int t) {
 	log("colour: %d", g_tint);
 }
 
+void set_theme(int t) { // the accent colour: a web-only look, no sidecar file
+	std::lock_guard<std::mutex> lock(g_ctl);
+	g_theme = std::max(0, std::min(7, t));
+	save_config();
+	log("theme: %d", g_theme);
+}
+
 void set_launchfx(int mode) {
 	std::lock_guard<std::mutex> lock(g_ctl);
 	g_launchfx = std::max(0, std::min(2, mode));
@@ -1316,12 +1382,21 @@ void set_launchfx(int mode) {
 	log("launch effect: %d", g_launchfx);
 }
 
+// The first clip the PS5 can decode ("" = none): every fallback lands on a playable one.
+std::string first_playable(const std::vector<Video>& videos) {
+	for (const Video& v : videos) {
+		if (clip_problem(v.path).empty()) {
+			return v.path;
+		}
+	}
+	return {};
+}
+
 bool set_enabled(bool on, std::string& error) {
 	std::lock_guard<std::mutex> lock(g_ctl);
 	g_enabled = on;
 	if (on && (g_current.empty() || !exists(g_current.c_str()))) {
-		const std::vector<Video> videos = list_videos();
-		g_current = videos.empty() ? std::string() : videos.front().path;
+		g_current = first_playable(list_videos());
 	}
 	save_config();
 	return apply_locked(error);
@@ -1407,12 +1482,12 @@ void load_playlists_locked() { // caller holds g_ctl
 bool restore_playlists(std::string& error) {
 	std::lock_guard<std::mutex> lock(g_ctl);
 	if (!exists(kPlaylistsBak)) {
-		error = "No earlier playlists to go back to";
+		error = "No hay listas anteriores a las que volver";
 		return false;
 	}
 	const std::string now = read_text(kPlaylistsFile, 2 * 1024 * 1024), bak = read_text(kPlaylistsBak, 2 * 1024 * 1024);
 	if (!write_text(kPlaylistsFile, bak) || !write_text(kPlaylistsBak, now)) {
-		error = "Could not restore the playlists";
+		error = "No se pudieron restaurar las listas";
 		return false;
 	}
 	g_playlists = parse_playlists(bak);
@@ -1488,7 +1563,7 @@ bool set_playlists(const std::string& text, std::string& error) {
 		write_text(kPlaylistsBak, old_text); // the list before this save (Undo, and the start-up restore)
 	}
 	if (!write_text(kPlaylistsFile, new_text)) {
-		error = "Could not save the playlists";
+		error = "No se pudieron guardar las listas";
 		return false;
 	}
 	log("playlists: %zu saved, on: %s", g_playlists.size(), after.empty() ? "none" : after.c_str());
@@ -1720,7 +1795,7 @@ bool set_option(const std::string& key, bool on, std::string& error) {
 		log("option storeonly=%d", on ? 1 : 0);
 		return !g_injected || apply_locked(error); // the Store's clip (or the normal one) now
 	} else {
-		error = "Unknown setting";
+		error = "Ajuste desconocido";
 		return false;
 	}
 	save_config();
@@ -1735,7 +1810,7 @@ bool delete_video(const std::string& path, std::string& error) {
 		// Release it on the home screen first: switch to another clip (or off).
 		std::string next;
 		for (const Video& v : list_videos()) {
-			if (v.path != path) {
+			if (v.path != path && clip_problem(v.path).empty()) {
 				next = v.path;
 				break;
 			}
@@ -1783,7 +1858,7 @@ bool delete_video(const std::string& path, std::string& error) {
 		}
 	}
 	if (!ok) {
-		error = "The file could not be deleted";
+		error = "No se pudo eliminar el archivo";
 	}
 	return ok;
 }
@@ -1814,6 +1889,7 @@ bool reset_settings(std::string& error) {
 	write_text("/system_tmp/gaelanilive/launchfx.txt", "0\n");
 	g_tint       = 0;
 	write_text("/system_tmp/gaelanilive/tint.txt", "0\n");
+	g_theme      = 0;
 	for (Playlist& p : g_playlists) {
 		p.on = false; // reset: playlists are kept, none plays
 	}
@@ -1822,9 +1898,8 @@ bool reset_settings(std::string& error) {
 	g_game_hide  = false;
 	write_game_open();
 	write_text(kMenusFile, "1\n");
-	if (g_current.empty() || !exists(g_current.c_str())) {
-		const std::vector<Video> videos = list_videos();
-		g_current = videos.empty() ? std::string() : videos.front().path;
+	if (g_current.empty() || !exists(g_current.c_str()) || !clip_problem(g_current).empty()) {
+		g_current = first_playable(list_videos());
 	}
 	save_config();
 	write_text(kDimFile, std::to_string(g_dim) + "\n");
@@ -1896,7 +1971,7 @@ void ensure_tile_background(const std::string& tid) {
 			break;
 		}
 	}
-	notify_plain((name + " is ready for its own video. Shut down GaelaniLIVE Engine and load it again to see it.").c_str());
+	notify_plain((name + " ya está listo para su propio vídeo. Apaga GaelaniLIVE y cárgalo de nuevo para verlo.").c_str());
 }
 
 void set_game_background(const std::string& tid, const std::string& path) {
@@ -2237,33 +2312,33 @@ std::string clip_res(const std::string& path) {
 	return a >= 3800 || b >= 2100 ? "4K" : a >= 2500 || b >= 1400 ? "2K" : a >= 1900 || b >= 1060 ? "FHD" : a >= 1260 || b >= 700 ? "HD" : "";
 }
 
-// "Can I play this?": why the PS5 will not play the clip ("" = it plays, or its header could not be read).
-// Limits: H.264 up to level 4.2, HEVC up to level 4.1, 8-bit 4:2:0, at most 1920x1088.
+// "Can I play this?": why the PS5 will not play the clip ("" = it plays). Limits: H.264 up to level
+// 5.2 and HEVC up to 5.2 on the UHD decoder, 8-bit 4:2:0, at most 3840x2160.
 std::string clip_problem(const std::string& path) {
 	const ClipInfo ci = clip_info(path);
 	char           why[96] = {};
 	if (ci.cut) {
-		return "The file is cut off - download it again";
+		return "El archivo está cortado - descárgalo de nuevo";
 	}
 	if (ci.frag) {
-		return "Fragmented MP4 - press Convert it on your phone or PC, or download it again";
+		return "MP4 fragmentado - conviértelo en tu móvil o PC (botón Convertir), o descárgalo de nuevo";
 	}
 	const bool uhd = ci.w > 1920 || ci.h > 1088; // 4K: the UHD decoder (H.264 up to 5.2, HEVC up to 5.1)
 	if (ci.w > 3840 || ci.h > 2160) {
-		snprintf(why, sizeof(why), "Too big (%ux%u) - max 3840x2160", ci.w, ci.h);
+		snprintf(why, sizeof(why), "Demasiado grande (%ux%u) - máx. 3840x2160", ci.w, ci.h);
 	} else if (!ci.read) {
-		return {};
+		return "No se pudo leer la cabecera - el archivo está dañado o no es un MP4";
 	} else if (ci.codec != "avc" && ci.codec != "hevc") {
-		snprintf(why, sizeof(why), "%s video - needs H.264 or HEVC",
+		snprintf(why, sizeof(why), "Vídeo %s - necesita H.264 o HEVC",
 		         ci.codec == "vp09" ? "VP9" : ci.codec == "av01" ? "AV1" : ci.codec == "mp4v" ? "MPEG-4" : ci.codec.c_str());
 	} else if (ci.bits > 8) {
-		snprintf(why, sizeof(why), "%d-bit colour - needs 8-bit", ci.bits);
+		snprintf(why, sizeof(why), "Color de %d bits - necesita 8 bits", ci.bits);
 	} else if (ci.chroma == 2 || ci.chroma == 3) {
-		snprintf(why, sizeof(why), "%s colour - needs 4:2:0", ci.chroma == 2 ? "4:2:2" : "4:4:4");
+		snprintf(why, sizeof(why), "Color %s - necesita 4:2:0", ci.chroma == 2 ? "4:2:2" : "4:4:4");
 	} else if (ci.codec == "avc" && ci.level > (uhd ? 52 : 42)) {
-		snprintf(why, sizeof(why), "H.264 level %d.%d - max %s", ci.level / 10, ci.level % 10, uhd ? "5.2" : "4.2");
-	} else if (ci.codec == "hevc" && ci.level > (uhd ? 153 : 123)) {
-		snprintf(why, sizeof(why), "HEVC level %d.%d - max %s", ci.level / 30, ci.level % 30 / 3, uhd ? "5.1" : "4.1");
+		snprintf(why, sizeof(why), "Nivel H.264 %d.%d - máx. %s", ci.level / 10, ci.level % 10, uhd ? "5.2" : "4.2");
+	} else if (ci.codec == "hevc" && ci.level > (uhd ? 156 : 123)) {
+		snprintf(why, sizeof(why), "Nivel HEVC %d.%d - máx. %s", ci.level / 30, ci.level % 30 / 3, uhd ? "5.2" : "4.1");
 	}
 	return why;
 }
@@ -2282,15 +2357,13 @@ void write_fast_map() {
 		return shown_path(clip);
 	};
 	std::string       out  = "*=" + (g_store_only ? shown(store_clip()) : g_main_video ? shown(g_current) : std::string("hide")) + "\n";
-	const bool        main_4k = !g_store_only && g_main_video && clip_is_big(g_current); // 4K main: no videos per game
-	const std::string text    = g_game_videos && !g_store_only && !main_4k ? read_text(kGamesFile, 64 * 1024) : std::string();
+	const std::string text = g_game_videos && !g_store_only ? read_text(kGamesFile, 64 * 1024) : std::string();
 	size_t            pos  = 0;
 	while (pos < text.size()) {
 		const size_t      end  = text.find('\n', pos);
 		const std::string line = text.substr(pos, end == std::string::npos ? std::string::npos : end - pos);
 		const size_t      eq   = line.find('=');
-		if (eq != std::string::npos && eq > 0 && line.compare(0, eq, "NPXS40047") != 0 && // Store: only in its own mode
-		    !clip_is_big(line.substr(eq + 1))) {                                              // 4K: main wallpaper only
+		if (eq != std::string::npos && eq > 0 && line.compare(0, eq, "NPXS40047") != 0) { // Store: only in its own mode
 			out += line.substr(0, eq) + "=" + shown(line.substr(eq + 1)) + "\n";
 		}
 		if (end == std::string::npos) {
@@ -2424,13 +2497,9 @@ std::vector<Game> list_games() {
 // the same tile, play that game's clip (games.txt) instead of the main one; elsewhere, the main one.
 // What PLAYS for a tile: its saved clip, unless "Videos per game" is off (then the main one).
 std::string game_clip(const std::string& tid) {
-	// A 4K main wallpaper pauses videos per game (user: "4K for all, or 1080p for all + per game"): every tile
-	// would switch the decoder 4K <-> 1080p (slow, black). The picks stay saved.
-	if (g_main_video && clip_is_big(g_current)) {
-		return {};
-	}
-	const std::string c = g_game_videos && !g_store_only && tid != "NPXS40047" ? saved_game_clip(tid) : std::string();
-	return clip_is_big(c) ? std::string() : c; // 4K is for the main wallpaper only: an old pick uses the main one
+	// 4K per game works too (v1.1): the swap fades to black while the decoder switches, so a
+	// 4K <-> 1080p change on a tile move stays smooth.
+	return g_game_videos && !g_store_only && tid != "NPXS40047" ? saved_game_clip(tid) : std::string();
 }
 
 // 4K plays (v1.4, UHD stream); bigger than 4K does not: say so instead of a black screen. True = refused
@@ -2535,7 +2604,7 @@ void* user_thread(void*) {
 			log("users: %s (%d) signed in%s", name.c_str(), id, off ? " - GaelaniLIVE is off for this user" : "");
 			bool redo = off != g_user_off;
 			g_user_off = off;
-			if (!mine.empty() && mine != g_current && exists(mine.c_str())) {
+			if (!mine.empty() && mine != g_current && exists(mine.c_str()) && clip_problem(mine).empty()) {
 				g_current = mine;
 				save_config();
 				log("users: %s's own wallpaper %s", name.c_str(), mine.c_str());
@@ -2600,9 +2669,6 @@ void* cycle_thread(void*) {
 		g_current = *next;
 		save_config();
 		save_user_wall(g_current);
-		if (g_main_video && clip_is_big(g_current)) {
-			g_override.clear();
-		}
 		log("playlist %s: next wallpaper %s", pl.name.c_str(), g_current.c_str());
 		std::string error;
 		if (!apply_locked(error)) {
@@ -2695,6 +2761,7 @@ int main() {
 	unlink("/system_tmp/gaelanilive/video_trying");
 	g_log = open(kLogFile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	log("GaelaniLIVE starting");
+	update_boot_check(); // self-update: claim a fresh update, roll a dead one back
 	if (take_over_running()) {
 		log("handover: took over from the GaelaniLIVE that was running");
 	}
@@ -2704,7 +2771,8 @@ int main() {
 	onion_log_set_level(ONION_LOG_DEBUG);
 
 	if (kOnionGuard && onion_daemon_answers()) {
-		notify("GaelaniLIVE Engine no puede ejecutarse mientras OnionHEN está en marcha.");
+		notify("GaelaniLIVE no puede ejecutarse mientras OnionHEN está en marcha.");
+		update_boot_ok();
 		return 1;
 	}
 
@@ -2715,26 +2783,38 @@ int main() {
 		load_config();
 		const bool chosen_ok = std::any_of(videos.begin(), videos.end(), [](const Video& v) { return v.path == g_current; });
 		if (!chosen_ok) {
-			g_current = videos.empty() ? std::string() : videos.front().path;
+			g_current = first_playable(videos);
+		}
+		// A saved clip the PS5 cannot decode would only show a black screen: turn it off instead.
+		if (!g_current.empty()) {
+			const std::string bad = clip_problem(g_current);
+			if (!bad.empty()) {
+				notify(("GaelaniLIVE: el vídeo guardado no se puede reproducir. " + bad).c_str());
+				log("saved clip refused: %s (%s)", g_current.c_str(), bad.c_str());
+				g_current.clear();
+				save_config();
+			}
 		}
 		if (g_shuffle && videos.size() > 1) {
-			// Random clip on every start, never the same one twice in a row.
+			// Random clip on every start, never the same one twice in a row (playable clips only).
 			srand(static_cast<unsigned>(time(nullptr)) ^ static_cast<unsigned>(getpid()));
 			std::vector<std::string> others;
 			for (const Video& v : videos) {
-				if (v.path != g_current) {
+				if (v.path != g_current && clip_problem(v.path).empty()) {
 					others.push_back(v.path);
 				}
 			}
-			g_current = others[static_cast<size_t>(rand()) % others.size()];
-			save_config();
-			log("shuffle: %s", g_current.c_str());
+			if (!others.empty()) {
+				g_current = others[static_cast<size_t>(rand()) % others.size()];
+				save_config();
+				log("shuffle: %s", g_current.c_str());
+			}
 		}
 		// Start with the clip of the game the home screen will highlight: the PS5 comes back to the
 		// last focused tile, which we noted (focus info only arrives once the user moves).
 		const std::string last = first_line(read_text("/data/GaelaniLIVE/last_game.txt", 64));
 		const std::string lclip = game_clip(last);
-		if (!lclip.empty() && exists(lclip.c_str())) {
+		if (!lclip.empty() && exists(lclip.c_str()) && clip_problem(lclip).empty()) {
 			g_override = lclip;
 			write_text("/system_tmp/gaelanilive/focus_game.txt", last + "\n");
 			ui_set_focus(last);
@@ -2754,13 +2834,21 @@ int main() {
 
 	pid_t last_pid = inject_shellui();
 	if (last_pid < 0) {
+		update_boot_ok(); // clean exit: the run itself was fine, the injection was not
 		return 3;
 	}
 	{
 		std::lock_guard<std::mutex> lock(g_ctl);
 		g_injected = last_pid > 0;
+		if (g_injected) {
+			std::string error;
+			// The path file was written before the injection: ShellUI reads it from its first line,
+			// so write it once more now that it watches (it could miss the first write).
+			apply_locked(error);
+		}
 	}
 	start_thread(after_start_thread);
+	update_stabilize_start(); // fresh update: 30 s without a crash marks it good
 	// Picks saved before this build: give their tiles a background too (only where one is missing).
 	{
 		const std::string text = read_text("/data/GaelaniLIVE/games.txt", 64 * 1024);
@@ -2821,7 +2909,7 @@ int main() {
 		}
 		if (!by_rest && alive < kCrashWindowSec) {
 			log("ShellUI died %ld s after injection: treating it as a crash, not re-injecting", alive);
-			notify("GaelaniLIVE Engine se detuvo: la pantalla de inicio falló. Registro: /data/GaelaniLIVE/gaelanilive.log");
+			notify("GaelaniLIVE se detuvo: la pantalla de inicio falló. Registro: /data/GaelaniLIVE/gaelanilive.log");
 			break;
 		}
 		sleep(3); // let the new ShellUI settle
@@ -2856,7 +2944,8 @@ int main() {
 		}
 		unmount_window_everywhere();
 		log("GaelaniLIVE stopped (soft: OnionHEN keeps running, the idle module stays in ShellUI)");
-		notify("GaelaniLIVE Engine se detuvo.");
+		notify("GaelaniLIVE se detuvo.");
+		update_boot_ok(); // a deliberate stop is a stable run
 		_exit(0); // see below
 	}
 	write_text(kPathFile, "off\n");
@@ -2869,7 +2958,8 @@ int main() {
 	unlink(kStatusFile);
 	ui_forget_status();
 	log("GaelaniLIVE stopped");
-	notify("GaelaniLIVE Engine se detuvo.");
+	notify("GaelaniLIVE se detuvo.");
+	update_boot_ok(); // a deliberate stop is a stable run
 	// _exit, not return: with libSceNet/libSceHttp linked, a normal exit hung in their
 	// shutdown and the process stayed alive holding ports 9049/9050/9051 - the next GaelaniLIVE got a white
 	// window and no shutdown (v1.3 test).

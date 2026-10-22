@@ -960,6 +960,9 @@ int start_own_player() {
 	if (view == nullptr) {
 		return 45;
 	}
+	// From here a later error leaves the view behind: claim it now, so the failure path in
+	// start_video disposes it (an appended view stays as a black layer otherwise).
+	g_own_view = view;
 
 	float   zero = 0.0f, width = 1920.0f, height = 1080.0f;
 	uint8_t overwrite = 3;
@@ -3021,12 +3024,16 @@ int start_video() {
 		raise_dim();
 		if (!g_welcomed) {
 			g_welcomed = true;
-			notify("Welcome to GaelaniLIVE Engine 📺");
+			notify("Bienvenido a GaelaniLIVE 📺");
 		}
 	} else {
 		write_status("failed %d", rc);
+		// Dispose whatever half-started so no dead layer stays over Sony's background, and lift a
+		// pending black at once: a broken clip falls back to the console's own background.
+		stop_video();
+		g_start_nothing = true;
 		char text[80];
-		snprintf(text, sizeof(text), "GaelaniLIVE Engine: the video could not start (%d)", rc);
+		snprintf(text, sizeof(text), "GaelaniLIVE: no se pudo iniciar el vídeo (%d) - vuelve el fondo de Sony", rc);
 		notify(text);
 	}
 	return rc;
@@ -3287,7 +3294,7 @@ void Update_Hook(Obj self) {
 	if (rc != 0) {
 		write_status("failed setup %d", rc);
 		char text[80];
-		snprintf(text, sizeof(text), "GaelaniLIVE Engine could not start (%d)", rc);
+		snprintf(text, sizeof(text), "GaelaniLIVE: no se pudo iniciar (%d)", rc);
 		notify(text);
 		return;
 	}
@@ -3334,15 +3341,28 @@ void* wallpaper_thread(void*) {
 	}
 	if (guard_exists()) {
 		wp_log("video: last attempt did not survive (%s still there)", kGuardFile);
-	} else if (!choose_video()) {
-		// strict: the configured video or nothing
 	} else {
-		// ShellUI often may not create files any more (its ~16 KB write budget, test v11-24): the video
-		// then waited for the first tile change. Start anyway; the payload stops crash loops itself.
-		if (!guard_create()) {
-			wp_log("video: cannot write %s, starting anyway", kGuardFile);
+		// The path file can arrive a moment late (written before the injection, issue #14): wait for
+		// it instead of giving up at once. A real answer ("off") is final, no waiting changes that.
+		bool started = choose_video();
+		for (int i = 0; !started && i < 5; ++i) {
+			char peek[512] = {};
+			read_request_line(peek, sizeof(peek));
+			if (peek[0] != 0 && peek[0] != '/') {
+				break;
+			}
+			wp_log("video: waiting for %s (%d/5)", kPathFile, i + 1);
+			sleep(1);
+			started = choose_video();
 		}
-		g_video_wanted.store(true, std::memory_order_release);
+		if (started) {
+			// ShellUI often may not create files any more (its ~16 KB write budget, test v11-24): the video
+			// then waited for the first tile change. Start anyway; the payload stops crash loops itself.
+			if (!guard_create()) {
+				wp_log("video: cannot write %s, starting anyway", kGuardFile);
+			}
+			g_video_wanted.store(true, std::memory_order_release);
+		}
 	}
 	g_pending.store(true, std::memory_order_release);
 	wp_log("queued for the UI thread");
@@ -3479,10 +3499,10 @@ extern "C" int main(int argc, char const* argv[]) {
 	};
 
 	if (!resolve_kernel()) {
-		return fail("GaelaniLIVE Engine could not start (kernel symbols missing)", 1);
+		return fail("GaelaniLIVE no pudo iniciar (faltan símbolos del kernel)", 1);
 	}
 	if (!resolve_mono()) {
-		return fail("GaelaniLIVE Engine could not start (Mono symbols missing)", 1);
+		return fail("GaelaniLIVE no pudo iniciar (faltan símbolos de Mono)", 1);
 	}
 	g_step.store("mono_get_root_domain / mono_thread_attach");
 	g_domain = mono_get_root_domain();
@@ -3498,14 +3518,14 @@ extern "C" int main(int argc, char const* argv[]) {
 	Obj pui_image = open_image("/system_ex/common_ex/lib/Sce.PlayStation.PUI.dll");
 	wp_log("PUI image %p", pui_image);
 	if (pui_image == nullptr) {
-		return fail("GaelaniLIVE Engine could not start (PUI not found)", 2);
+		return fail("GaelaniLIVE no pudo iniciar (no se encontró PUI)", 2);
 	}
 	g_step.store("compile Application.Update");
 	const uint64_t update_addr =
 	    get_method_address(pui_image, "Sce.PlayStation.PUI", "Application", "Update", 0);
 	wp_log("Application.Update compiled at %#lx", static_cast<unsigned long>(update_addr));
 	if (update_addr == 0) {
-		return fail("GaelaniLIVE Engine could not start (Update not found)", 3);
+		return fail("GaelaniLIVE no pudo iniciar (no se encontró Update)", 3);
 	}
 	g_step.store("InstallDetour(Application.Update)");
 	if (!InstallDetour(update_addr, reinterpret_cast<void*>(&Update_Hook),
@@ -3536,7 +3556,7 @@ extern "C" int main(int argc, char const* argv[]) {
 		                                reinterpret_cast<void**>(&g_update_orig)) ||
 		    g_update_orig == nullptr) {
 			wp_log("Application.Update: no other hook to chain after (next %#lx)", static_cast<unsigned long>(next));
-			return fail("GaelaniLIVE Engine could not start (hook failed)", 4);
+			return fail("GaelaniLIVE no pudo iniciar (falló el hook)", 4);
 		}
 		wp_log("Application.Update already hooked by another tool: chained after it at %#lx",
 		       static_cast<unsigned long>(next));

@@ -43,6 +43,7 @@ struct State {
 	int                launchfx   = 0;
 	bool               pl_bak     = false; // playlists.bak exists: "Undo last change"
 	int                tint       = 0;     // Picture -> Colour     // game launch effect: 0 fade, 1 dive, 2 pull back
+	int                theme      = 0;     // accent colour preset 0..7 (the page's look)
 	bool               auto_match = false; // a game tile without its own video: a note when Discover has wallpapers for it
 	bool               game_hide  = false; // no video on the home screen while a game is open
 	std::string        playlist;           // the playlist that is on ("" = none)
@@ -67,6 +68,7 @@ bool set_user_on(int id, bool on);                      // Users: GaelaniLIVE fo
 std::string users_json();                               // [{"id":..,"name":"..","on":true,"now":true},..]
 std::string user_avatar(int id);                        // the user's profile picture (PNG, "" = none)
 void set_dim(int percent); // 0..80
+void set_theme(int t);     // accent colour preset 0..7 (page + remote)
 // Bumped after the PS5 wakes from rest mode: every listening socket closes and opens again.
 int  net_epoch();
 void set_volume(int percent); // 0..100
@@ -85,15 +87,25 @@ std::string       saved_game_clip(const std::string& tid); // saved choice, even
 bool              is_title_id(const char* name);
 void*             focus_thread(void*);
 void              mirror_games();
-bool              clip_is_big(const std::string& path); // bigger than 1080p (4K: not supported)
-std::string       clip_problem(const std::string& path); // why the PS5 will not play it ("" = plays / unknown)
+bool              clip_is_big(const std::string& path); // bigger than 1080p (4K plays via the UHD stream)
+std::string       clip_problem(const std::string& path); // why the PS5 will not play it ("" = plays)
 std::string       clip_res(const std::string& path);     // "4K" / "2K" / "FHD" / "HD" / "" (list badges)
 bool              clip_has_audio(const std::string& path); // it has a sound track (the list's sound badge)
 std::vector<std::string> favorites();                // favorite clip paths (pinned at the top of the list)
 void              set_favorite(const std::string& path, bool on);
-bool              refuse_4k(const std::string& path, std::string& error); // 4K: not supported (notifies)
+bool              refuse_4k(const std::string& path, std::string& error); // bigger than 4K: refused (notifies)
 void              write_game_open(); // ShellUI hint for "Hide while a game is open"; caller holds g_ctl
 void              write_fast_map(); // ShellUI's fast-switch map; caller holds g_ctl
+std::string       logtail_text(); // GET /api/logtail: last lines of every log (Diagnóstico)
+
+// Self-update (gaelanilive_update.cpp): the page downloads the release, POSTs it to /api/update.
+const char* version();       // GAELANILIVE_VERSION
+std::string sha256_file(const std::string& path); // hex sha256 ("" = cannot read)
+bool        elf_bytes_ok(const std::string& path); // ELF magic + the loader's own bounds check
+void        update_boot_check();   // very early startup: claim a fresh update or roll a failed one back
+void        update_boot_ok();      // clean exit: the verification window is over
+void        update_stabilize_start(); // 30 s without a crash = the update is good
+bool        update_install_start(const std::string& ver, std::string& error); // swap + relaunch (async)
 
 void start_web_server();
 bool page_open(); // the GaelaniLIVE window's page is polling (it is open on the PS5)

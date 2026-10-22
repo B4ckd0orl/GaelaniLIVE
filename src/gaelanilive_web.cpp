@@ -6,12 +6,17 @@
  *   GET /icon.png       app icon
  *   GET /thumb?i=N      <clip>.png next to the clip (a still the page grabbed once), 404 if none
  *   GET /video?i=N      the clip itself, with Range support (the page's live preview)
- *   GET /api/state      {"enabled","status","current","videos":[...]}
+ *   GET /api/state      {"enabled","status","current","version","videos":[...]}
  *   GET /api/select?i=N play clip N (index into videos)
  *   GET /api/fav?i=N&v=1 favorite (pinned at the top) / v=0 not
  *   GET /api/on|off     wallpaper on / off
  *   GET /api/dim?v=N    darken the video by N % (0..80) so the home screen stays readable
  *   GET /api/volume?v=N sound of clips that have it, N % (0..100)
+ *   GET /api/tint?v=N    Picture -> Colour, N 0..5
+ *   GET /api/theme?v=N   accent colour of the pages, N 0..7
+ *   GET /api/logtail    the last lines of every log (Diagnóstico)
+ *   POST /api/update?sha=<hex64>&ver=<tag>  self-update: body = the new gaelanilive.elf from the
+ *                        GitHub release (the page downloaded it); staged, verified, relaunched
  */
 #include "gaelanilive.hpp"
 
@@ -87,8 +92,8 @@ std::string json_str(const std::string& s) {
 std::string state_json() {
 	const State st = get_state();
 	std::string j  = std::string("{\"enabled\":") + (st.enabled ? "true" : "false") + ",\"dim\":" + std::to_string(st.dim) + ",\"volume\":" + std::to_string(st.volume) +
-	                ",\"looks\":[" + std::to_string(st.looks[0]) + "," + std::to_string(st.looks[1]) + "," + std::to_string(st.looks[2]) + "," + std::to_string(st.looks[3]) + "]" + ",\"shuffle\":" + (st.shuffle ? "true" : "false") + ",\"mainvideo\":" + (st.main_video ? "true" : "false") + ",\"gamevideos\":" + (st.game_videos ? "true" : "false") + ",\"gamepause\":" + (st.game_pause ? "true" : "false") + ",\"menuhide\":" + (st.menu_hide ? "true" : "false") + ",\"storeonly\":" + (st.store_only ? "true" : "false") + ",\"parallax\":" + (st.parallax ? "true" : "false") + ",\"automatch\":" + (st.auto_match ? "true" : "false") + ",\"resume\":" + (st.resume ? "true" : "false") + ",\"launchfx\":" + std::to_string(st.launchfx) + ",\"plbak\":" + (st.pl_bak ? "true" : "false") + ",\"tint\":" + std::to_string(st.tint) + ",\"playlist\":" + json_str(st.playlist) + ",\"users\":" + users_json() + ",\"gamehide\":" + (st.game_hide ? "true" : "false") +
-	                ",\"ip\":" + json_str(st.ip) + ",\"port\":" + std::to_string(kWebPort) + ",\"games\":" + json_str(games_text()) + ",\"game\":" + json_str(st.game) + ",\"status\":" + json_str(st.status) + ",\"current\":" + json_str(st.current) + ",\"main4k\":" + (st.main_video && clip_is_big(st.current) ? "true" : "false") + ",\"videos\":[";
+	                ",\"looks\":[" + std::to_string(st.looks[0]) + "," + std::to_string(st.looks[1]) + "," + std::to_string(st.looks[2]) + "," + std::to_string(st.looks[3]) + "]" + ",\"shuffle\":" + (st.shuffle ? "true" : "false") + ",\"mainvideo\":" + (st.main_video ? "true" : "false") + ",\"gamevideos\":" + (st.game_videos ? "true" : "false") + ",\"gamepause\":" + (st.game_pause ? "true" : "false") + ",\"menuhide\":" + (st.menu_hide ? "true" : "false") + ",\"storeonly\":" + (st.store_only ? "true" : "false") + ",\"parallax\":" + (st.parallax ? "true" : "false") + ",\"automatch\":" + (st.auto_match ? "true" : "false") + ",\"resume\":" + (st.resume ? "true" : "false") + ",\"launchfx\":" + std::to_string(st.launchfx) + ",\"plbak\":" + (st.pl_bak ? "true" : "false") + ",\"tint\":" + std::to_string(st.tint) + ",\"theme\":" + std::to_string(st.theme) + ",\"playlist\":" + json_str(st.playlist) + ",\"users\":" + users_json() + ",\"gamehide\":" + (st.game_hide ? "true" : "false") +
+	                ",\"ip\":" + json_str(st.ip) + ",\"port\":" + std::to_string(kWebPort) + ",\"version\":" + json_str(version()) + ",\"games\":" + json_str(games_text()) + ",\"game\":" + json_str(st.game) + ",\"status\":" + json_str(st.status) + ",\"current\":" + json_str(st.current) + ",\"videos\":[";
 	const std::vector<std::string> fav = favorites();
 	for (size_t i = 0; i < st.videos.size(); ++i) {
 		const Video& v = st.videos[i];
@@ -437,7 +442,7 @@ void save_thumb(int fd, int i, const char* headers, const char* body, size_t hav
 	const char* cl   = strcasestr(headers, "\nContent-Length:");
 	const long  size = cl != nullptr ? strtol(cl + 16, nullptr, 10) : 0;
 	if (!video_at(i, v) || size < kMinThumb || static_cast<size_t>(size) > kMaxThumb) {
-		reply_json(fd, result_json(false, "bad thumbnail"));
+			reply_json(fd, result_json(false, "Miniatura no válida"));
 		return;
 	}
 	std::string data(body, have < static_cast<size_t>(size) ? have : static_cast<size_t>(size));
@@ -445,7 +450,7 @@ void save_thumb(int fd, int i, const char* headers, const char* body, size_t hav
 	while (data.size() < static_cast<size_t>(size)) {
 		const ssize_t got = recv(fd, chunk, sizeof(chunk), 0);
 		if (got <= 0) {
-			reply_json(fd, result_json(false, "upload cut"));
+				reply_json(fd, result_json(false, "Subida interrumpida"));
 			return;
 		}
 		data.append(chunk, static_cast<size_t>(got));
@@ -500,14 +505,14 @@ void save_upload(int fd, const std::string& query, const char* headers, const ch
 	const char*     cl     = strcasestr(headers, "\nContent-Length:");
 	const long long size   = cl != nullptr ? strtoll(cl + 16, nullptr, 10) : 0;
 	if (!is_mp4 || size <= 0 || size > 8LL * 1024 * 1024 * 1024) {
-		reply_json(fd, result_json(false, "Only .mp4 files can be uploaded"));
+		reply_json(fd, result_json(false, "Solo se pueden subir archivos .mp4"));
 		return;
 	}
 	const std::string path = "/data/GaelaniLIVE/video/" + name;
 	const std::string part = path + ".part";
 	const int         f    = open(part.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (f < 0) {
-		reply_json(fd, result_json(false, "Cannot write to /data/GaelaniLIVE/video"));
+		reply_json(fd, result_json(false, "No se puede escribir en /data/GaelaniLIVE/video"));
 		return;
 	}
 	log("upload %s: %lld bytes", name.c_str(), size);
@@ -533,10 +538,105 @@ void save_upload(int fd, const std::string& query, const char* headers, const ch
 	if (!ok || done != size || rename(part.c_str(), path.c_str()) != 0) {
 		unlink(part.c_str());
 		log("upload %s: FAILED at %lld of %lld bytes", name.c_str(), done, size);
-		reply_json(fd, result_json(false, "Upload stopped before the end"));
+		reply_json(fd, result_json(false, "La subida se interrumpió antes de terminar"));
 		return;
 	}
 	log("upload %s: done", name.c_str());
+	reply_json(fd, result_json(true, ""));
+}
+
+// Self-update: POST /api/update?sha=<hex64>&ver=<tag>, raw body = gaelanilive.elf from the GitHub
+// release (the page did the download and, on secure contexts, the hash). Staged as .new, verified
+// here (sha256 + the loader's own bounds check), then update_install_start() swaps it in and
+// relaunches 2 s later - the reply always goes out first. sha may be sent empty (no
+// crypto.subtle on plain-http phones): then only the loader check guards the file.
+void save_update(int fd, const std::string& query, const char* headers, const char* body, size_t have) {
+	std::string sha;
+	if (const size_t a = query.find("sha="); a != std::string::npos) {
+		sha = query.substr(a + 4, query.find('&', a) - (a + 4));
+		// Empty = the page could not hash it (no crypto.subtle on plain-http phones): skip the
+		// hash, the loader's own check still guards the file. Non-empty must be 64 hex digits.
+		if (!sha.empty() &&
+		    (sha.size() != 64 || !std::all_of(sha.begin(), sha.end(), [](char c) {
+			     return isxdigit(static_cast<unsigned char>(c)) != 0;
+		     }))) {
+			reply_json(fd, result_json(false, "sha256 incorrecto"));
+			return;
+		}
+	}
+	std::string tag;
+	if (const size_t a = query.find("ver="); a != std::string::npos) {
+		const std::string raw = url_decode(query.substr(a + 4, query.find('&', a) - (a + 4)));
+		for (const char c : raw) {
+			if (isalnum(static_cast<unsigned char>(c)) || c == '.' || c == '_' || c == '-') {
+				tag += c;
+			}
+		}
+	}
+	if (tag.size() > 40) {
+		tag.resize(40);
+	}
+	const char*     cl   = strcasestr(headers, "\nContent-Length:");
+	const long long size = cl != nullptr ? strtoll(cl + 16, nullptr, 10) : 0;
+	if (size < 64 * 1024 || size > 32LL * 1024 * 1024) {
+		reply_json(fd, result_json(false, "Tamaño de actualización no válido"));
+		return;
+	}
+	const std::string path = "/data/GaelaniLIVE/gaelanilive.elf.new";
+	const std::string part = path + ".part";
+	const int         f    = open(part.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (f < 0) {
+		reply_json(fd, result_json(false, "No se puede escribir en /data/GaelaniLIVE"));
+		return;
+	}
+	log("update: staging %s (%lld bytes)", tag.empty() ? "?" : tag.c_str(), size);
+	long long    done  = 0;
+	bool         ok    = true;
+	const size_t first = have < static_cast<size_t>(size) ? have : static_cast<size_t>(size);
+	if (first > 0) {
+		ok   = write(f, body, first) == static_cast<ssize_t>(first);
+		done = static_cast<long long>(first);
+	}
+	static thread_local char chunk[256 * 1024];
+	while (ok && done < size) {
+		const size_t  want = size - done < static_cast<long long>(sizeof(chunk)) ? static_cast<size_t>(size - done) : sizeof(chunk);
+		const ssize_t got  = recv(fd, chunk, want, 0);
+		if (got <= 0) {
+			ok = false;
+			break;
+		}
+		ok = write(f, chunk, static_cast<size_t>(got)) == got;
+		done += got;
+	}
+	close(f);
+	if (!ok || done != size || rename(part.c_str(), path.c_str()) != 0) {
+		unlink(part.c_str());
+		log("update: staging FAILED at %lld of %lld bytes", done, size);
+		reply_json(fd, result_json(false, "La descarga de la actualización se interrumpió"));
+		return;
+	}
+	if (!sha.empty()) {
+		const std::string got = sha256_file(path);
+		if (got != sha) {
+			unlink(path.c_str());
+			log("update: sha256 mismatch (%s != %s)", got.c_str(), sha.c_str());
+			reply_json(fd, result_json(false, "El archivo descargado no coincide con su sha256"));
+			return;
+		}
+	}
+	if (!elf_bytes_ok(path)) {
+		unlink(path.c_str());
+		log("update: the staged file is not a valid payload");
+		reply_json(fd, result_json(false, "El archivo descargado no es un payload válido"));
+		return;
+	}
+	std::string err;
+	if (!update_install_start(tag, err)) {
+		unlink(path.c_str());
+		reply_json(fd, result_json(false, err));
+		return;
+	}
+	log("update: staged ok, relaunching in 2 s");
 	reply_json(fd, result_json(true, ""));
 }
 
@@ -579,6 +679,8 @@ void handle(int fd) {
 	if (post) {
 		if (path == "/api/upload") {
 			save_upload(fd, query, headers, body, have);
+		} else if (path == "/api/update") {
+			save_update(fd, query, headers, body, have);
 		} else if (path == "/thumb") {
 			save_thumb(fd, index_arg(query), headers, body, have);
 		} else if (path == "/api/playlists") { // the page's whole set of playlists (P/V lines)
@@ -595,7 +697,7 @@ void handle(int fd) {
 			}
 			const bool ok = size > 0 && size <= 2 * 1024 * 1024 && data.size() >= static_cast<size_t>(size) &&
 			                set_playlists(data.substr(0, static_cast<size_t>(size)), error);
-			reply_json(fd, result_json(ok, error.empty() ? "The playlists did not arrive" : error));
+			reply_json(fd, result_json(ok, error.empty() ? "Las listas no llegaron" : error));
 		} else {
 			reply_404(fd);
 		}
@@ -649,9 +751,12 @@ void handle(int fd) {
 			g_page_seen = static_cast<long>(time(nullptr)); // our window on the PS5 polls every second
 		}
 		reply_json(fd, state_json());
+	} else if (path == "/api/logtail") {
+		const std::string text = logtail_text();
+		reply(fd, "200 OK", "text/plain; charset=utf-8", text.data(), text.size());
 	} else if (path == "/api/select") {
 		Video v;
-		const bool ok = video_at(index_arg(query), v) ? select_video(v.path, error) : (error = "No such video", false);
+		const bool ok = video_at(index_arg(query), v) ? select_video(v.path, error) : (error = "Ese vídeo no existe", false);
 		log("web: select %s -> %s", v.path.c_str(), ok ? "ok" : error.c_str());
 		reply_json(fd, result_json(ok, error));
 	} else if (path == "/api/fav") {
@@ -661,7 +766,7 @@ void handle(int fd) {
 		if (ok) {
 			set_favorite(v.path, query.find("v=1") != std::string::npos);
 		}
-		reply_json(fd, result_json(ok, "No such video"));
+		reply_json(fd, result_json(ok, "Ese vídeo no existe"));
 	} else if (path == "/api/dim") {
 		const size_t pos = query.find("v=");
 		set_dim(pos == std::string::npos ? 25 : atoi(query.c_str() + pos + 2));
@@ -686,6 +791,10 @@ void handle(int fd) {
 	} else if (path == "/api/tint") { // ?v=0..5
 		const size_t v = query.find("v=");
 		set_tint(v == std::string::npos ? 0 : atoi(query.c_str() + v + 2));
+		reply_json(fd, result_json(true, error));
+	} else if (path == "/api/theme") { // ?v=0..7 accent colour preset
+		const size_t v = query.find("v=");
+		set_theme(v == std::string::npos ? 0 : atoi(query.c_str() + v + 2));
 		reply_json(fd, result_json(true, error));
 	} else if (path == "/api/launchfx") { // ?m=0|1|2
 		const size_t m = query.find("m=");
@@ -744,14 +853,16 @@ void handle(int fd) {
 		Video v;
 		const int i = k == std::string::npos ? -1 : atoi(query.c_str() + k + 2);
 		const bool  ok  = !tid.empty() && (i < 0 || video_at(i, v));
-		std::string err = "Unknown game or video";
+		std::string err = "Juego o vídeo desconocido";
 		bool        big = ok && i >= 0 && refuse_4k(v.path, err); // bigger than 4K (notifies)
-		if (ok && !big && i >= 0 && tid != "NPXS40047" && clip_is_big(v.path)) {
-			// 4K plays as the main wallpaper or the PS Store only clip (one clip, never swapped), not per game.
-			big = true;
-			const std::string r = clip_res(v.path); // 4K or 2K
-			err = r + " videos work as the main wallpaper only. Pick a 1080p video for this game.";
-			notify((r + " works as the main wallpaper only").c_str());
+		if (ok && !big && i >= 0) {
+			// A clip the PS5 cannot decode would only show black on that tile too.
+			const std::string why = clip_problem(v.path);
+			if (!why.empty()) {
+				big = true;
+				err = why;
+				notify(("GaelaniLIVE: este vídeo no se reproducirá. " + why).c_str());
+			}
 		}
 		if (ok && !big) {
 			set_game_background(tid, i < 0 ? std::string() : v.path);
@@ -765,7 +876,7 @@ void handle(int fd) {
 		reply_json(fd, result_json(ok, error));
 	} else if (path == "/api/delete") {
 		Video v;
-		const bool ok = video_at(index_arg(query), v) ? delete_video(v.path, error) : (error = "No such video", false);
+		const bool ok = video_at(index_arg(query), v) ? delete_video(v.path, error) : (error = "Ese vídeo no existe", false);
 		reply_json(fd, result_json(ok, error));
 	} else if (path == "/api/reset") {
 		const bool ok = reset_settings(error);
