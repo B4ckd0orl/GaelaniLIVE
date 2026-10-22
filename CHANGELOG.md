@@ -3,6 +3,18 @@
 Todos los cambios notables de GaelaniLIVE.
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [v1.2.0] - 2026-10-22
+
+### Corregido
+- Auto-actualización: al relanzar el payload quedaba el módulo de la versión
+  anterior dentro de SceShellUI junto con el nuevo (dos módulos luchando por el
+  vídeo, con arranques/paradas en carrera). El daemon nuevo reinicia ahora
+  SceShellUI e inyecta en el limpio, igual que una parada normal entre versiones;
+  con OnionHEN en marcha reutiliza el módulo aparcado en vez de reiniciar. El
+  marcador `injected` guarda ahora pid y build, y las actualizaciones desde
+  v1.0.0/v1.1.0 (que borraban el marcador) se detectan por la ventana de
+  verificación del update.
+
 ## [v1.1.0] - 2026-10-22
 
 ### Añadido

@@ -94,6 +94,9 @@ constexpr const char* kOnionToolbox   = "/system_tmp/onionhen/ready/toolbox";
 constexpr int         kOnionCtrlPort  = 9048;
 constexpr off_t       kLogMaxSize     = 512 * 1024;
 constexpr long        kCrashWindowSec = 120;
+// This build, so a handover can tell old from new ("handover <build>") and the injection marker
+// records which build's module sits in ShellUI ("<pid> <build>").
+constexpr const char* kBuild          = __DATE__ " " __TIME__;
 // Runs next to OnionHEN (tested 2026-10-15): no "OnionHEN is running" refusal any more.
 constexpr bool        kOnionGuard     = false;
 
@@ -737,8 +740,44 @@ void wait_shellui_ready(pid_t pid) {
 	}
 }
 
+// After ending SceShellUI the system starts a new one (a few seconds): return its pid, 30 s max.
+pid_t wait_fresh_shellui(pid_t old) {
+	for (int i = 0; i < 60; ++i) {
+		const pid_t now = onion_find_pid("SceShellUI");
+		if (now > 0 && now != old) {
+			return now;
+		}
+		usleep(500 * 1000);
+	}
+	return onion_find_pid("SceShellUI"); // whatever is running now (the caller logs the outcome)
+}
+
+// The marker holds "<pid> <build>" (v1.2+; the build without spaces: __DATE__ has them) or just
+// "<pid>" (up to v1.1): which module sits in ShellUI.
+std::string build_id() {
+	std::string out;
+	for (const char c : std::string(kBuild)) {
+		if (c != ' ') {
+			out += c;
+		}
+	}
+	return out;
+}
+
+void read_marker(long& pid, std::string& build) {
+	pid   = 0;
+	build.clear();
+	char              buf[96] = {};
+	const std::string text    = first_line(read_text(kOurMarker, sizeof(buf)));
+	if (sscanf(text.c_str(), "%ld %95s", &pid, buf) >= 1) {
+		build = buf;
+	} else {
+		pid = 0;
+	}
+}
+
 pid_t inject_shellui() {
-	const pid_t pid = onion_find_pid("SceShellUI");
+	pid_t pid = onion_find_pid("SceShellUI");
 	if (pid <= 0) {
 		log("SceShellUI not found");
 		return 0;
@@ -747,9 +786,36 @@ pid_t inject_shellui() {
 		notify("GaelaniLIVE no puede ejecutarse mientras OnionHEN está en marcha.");
 		return -1;
 	}
-	if (read_pid_file(kOurMarker) == pid) {
+	// A module of ANOTHER build still inside ShellUI (a self-update relaunched the payload without
+	// restarting ShellUI; installs up to v1.1 even deleted this marker) would end up running next to
+	// the one injected now: two modules fighting over the video. End ShellUI - like the normal stop
+	// of a different build - and inject into the clean one the system starts. With OnionHEN running
+	// a restart would take its toolbox down too: reuse the parked module instead (soft stop).
+	long        mk_pid = 0;
+	std::string mk_build;
+	read_marker(mk_pid, mk_build);
+	const std::string my_build = build_id();
+	const bool        ours     = mk_pid == pid && (mk_build == my_build || (mk_build.empty() && !update_fresh_claim()));
+	const bool        foreign  = !ours && ((mk_pid == pid) || (mk_pid == 0 && update_fresh_claim()));
+	if (ours) {
 		log("already injected in ShellUI pid %d", static_cast<int>(pid));
 		return pid;
+	}
+	if (foreign) {
+		if (onion_daemon_answers() || read_pid_file(kOnionToolbox) == pid) {
+			log("update: OnionHEN is running, reusing the module already in ShellUI %d",
+			    static_cast<int>(pid));
+			return pid;
+		}
+		log("update: ShellUI %d still holds %s, restarting it for %s", static_cast<int>(pid),
+		    mk_pid == pid && !mk_build.empty() ? mk_build.c_str() : "the previous build",
+		    my_build.c_str());
+		restart_shellui();
+		pid = wait_fresh_shellui(pid);
+		if (pid <= 0) {
+			log("restart: no new SceShellUI after the update");
+			return -1;
+		}
 	}
 	wait_shellui_ready(pid);
 	unlink(kStatusFile);
@@ -760,7 +826,7 @@ pid_t inject_shellui() {
 		notify("GaelaniLIVE no pudo iniciar (falló la inyección).");
 		return -1;
 	}
-	write_text(kOurMarker, std::to_string(pid));
+	write_text(kOurMarker, std::to_string(pid) + " " + my_build);
 	log("injected into ShellUI pid %d", static_cast<int>(pid));
 	unfreeze_if_stuck(pid);
 	return pid;
@@ -881,8 +947,6 @@ int open_stop_port() {
 
 // Loading the ELF while GaelaniLIVE already runs: ask the running one to leave (handover above), so
 // this one gets the ports (they were "unavailable", and the status went to the old one, test v11-24).
-// This build, so a handover can tell old from new ("handover <build>").
-constexpr const char* kBuild = __DATE__ " " __TIME__;
 
 bool take_over_running() {
 	auto connect_stop = []() -> int {

@@ -105,6 +105,7 @@ bool        elf_bytes_ok(const std::string& path); // ELF magic + the loader's o
 void        update_boot_check();   // very early startup: claim a fresh update or roll a failed one back
 void        update_boot_ok();      // clean exit: the verification window is over
 void        update_stabilize_start(); // 30 s without a crash = the update is good
+bool        update_fresh_claim();  // true only for the run that claimed a just-installed update
 bool        update_install_start(const std::string& ver, std::string& error); // swap + relaunch (async)
 
 void start_web_server();

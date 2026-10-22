@@ -45,7 +45,10 @@ constexpr const char* kElfBak      = "/data/GaelaniLIVE/gaelanilive.elf.bak";
 constexpr const char* kAppliedFile = "/data/GaelaniLIVE/update.applied";
 constexpr const char* kBootingFile = "/data/GaelaniLIVE/update.booting";
 constexpr const char* kPathFile    = "/system_tmp/gaelanilive/video.txt";
-constexpr const char* kOurMarker   = "/system_tmp/gaelanilive/injected";
+
+// True only for the run that claimed a just-installed update (update.applied -> update.booting):
+// inject_shellui uses it to end ShellUI when the previous build's module is still in there.
+bool g_fresh_claim = false;
 
 bool file_exists(const std::string& path) {
 	struct stat st {};
@@ -204,6 +207,7 @@ void update_boot_check() {
 	if (file_exists(kAppliedFile)) {
 		// The run started right after the swap: claim the verification window.
 		// (update.applied already carries the version tag written by install_now.)
+		g_fresh_claim = true;
 		unlink(kBootingFile);
 		if (rename(kAppliedFile, kBootingFile) != 0) {
 			unlink(kAppliedFile);
@@ -254,12 +258,18 @@ void update_stabilize_start() {
 	}
 }
 
+bool update_fresh_claim() {
+	return g_fresh_claim;
+}
+
 // ---- install: swap the verified file in, then relaunch --------------------------------------
 
 namespace {
 
 void install_now(const std::string& ver) {
-	// Hand the home screen back to Sony first (the new payload injects it again).
+	// Hand the home screen back to Sony first. The injected marker stays: it tells the new run
+	// (inject_shellui) which build's module is still inside ShellUI, so it can end ShellUI and
+	// inject into a clean one instead of leaving two modules fighting over the video.
 	{
 		FILE* f = fopen(kPathFile, "w");
 		if (f != nullptr) {
@@ -267,7 +277,6 @@ void install_now(const std::string& ver) {
 			fclose(f);
 		}
 	}
-	unlink(kOurMarker);
 	const bool had_old = file_exists(kElfPath);
 	unlink(kElfBak);
 	if (had_old && rename(kElfPath, kElfBak) != 0) {
