@@ -53,7 +53,7 @@ jobs:
           # util/daemon/bootstrapper/unpacker need libcurl in the SDK homebrew dir
           # (cheat catalog HTTP), which the SDK release zip does not ship.
           # GaelaniLIVE builds none of them, so skip configuring those dirs.
-          sed -i -E 's|^add_subdirectory\((util|daemon|bootstrapper|unpacker)\)$|# skipped (needs libcurl): add_subdirectory(\1)|' \
+          sed -i -E 's@^add_subdirectory\((util|daemon|bootstrapper|unpacker)\)$@# skipped (needs libcurl): add_subdirectory(\1)@' \
             "$ONIONHEN/source/CMakeLists.txt"
           tail -6 "$ONIONHEN/source/CMakeLists.txt"
 
