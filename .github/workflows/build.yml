@@ -30,16 +30,17 @@ jobs:
           git clone --depth 1 --branch v0.9.0-beta2 \
             https://github.com/aydencharles/onionHEN.git "$HOME/onionHEN-beta2"
           cd "$HOME/onionHEN-beta2"
-          git submodule update --init --recursive --depth 1
+          # Non-recursive: nested BearSSL rejects shallow SHA fetches; kstuff.elf
+          # comes prebuilt from sync_dependencies.sh anyway.
+          git submodule update --init --depth 1
           echo "ONIONHEN=$HOME/onionHEN-beta2" >> "$GITHUB_ENV"
 
       - name: Sync OnionHEN dependencies (kstuff etc.)
         run: |
           cd "$ONIONHEN"
-          if [ -x scripts/sync_dependencies.sh ]; then
-            ./scripts/sync_dependencies.sh || true
-          fi
-          ls -la .cache/dependencies/ || true
+          export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
+          ./scripts/sync_dependencies.sh
+          test -s .cache/dependencies/kstuff.elf
 
       - name: Inject GaelaniLIVE into OnionHEN tree
         run: |
