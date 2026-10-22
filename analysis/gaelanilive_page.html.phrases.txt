@@ -1,0 +1,355 @@
+A cover
+Add a video to get started
+Add a video to this playlist first')
+All off'
+At least one user keeps GaelaniLIVE.')
+Background for '+gameName(tid)
+Background for this tile
+By AZiZ. Animated wallpapers for the PS5 home screen
+Change background
+Change every
+Colour layer
+Colour layer (a tint of the dim layer)
+Colour layer (as ShellUI paints it), Vignette, Haze
+Control GaelaniLIVE from a browser on the same Wi-Fi
+Copy an
+Create and play'
+Delete and reset ask twice
+Delete playlist
+Delete the playlist
+Deleted '+bare(v.name)
+Deleting '+bare(v.name))
+Dim '+S.dim
+Dim off'
+Dim off')+(lk
+Discover preview, else the name on a tile
+Each time GaelaniLIVE starts, it picks a different clip
+Fade / Dive / Pull back
+For videos with sound. The PS5's own music goes quiet while
+GaelaniLIVE Engine
+GaelaniLIVE Engine v1.5.0
+GaelaniLIVE for
+GaelaniLIVE is not running'
+GaelaniLIVE is not running')
+GaelaniLIVE is on for '+u.name
+GaelaniLIVE is shutting down. The home screen restarts in a moment.')
+GaelaniLIVE per console user (GitHub issue
+GaelaniLIVE plays only for the users turned on
+Game launch effect
+Games and apps play the video you gave them in Library
+Go back to the playlists before your last change?'))return
+Has sound
+Helvetica Neue
+Hide in Settings
+Hide while a game is open
+Home screen
+Home screen).'
+Home screen, on the right)
+How the wallpaper leaves when a game starts
+How the wallpaper leaves when a game starts. Default
+Internal is in All
+Keep focus on a card only if the user was on
+Library tab
+Loading your library
+Looking up the address
+M11 9.2v4.3l3.2-2.15z
+M12 11v5.5M12 7.5h.01
+M2 3.5h8M2 7h8M2 10.5h5
+M3 3l6 6M9 3l-6 6
+M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 8.5h5.6l.7-8.5
+M5 7v2.4M3.8 8.2h2.4
+M6 6V1.5h4V6
+M6 8h12a4 4 0 0 1 3.9 4.9l-1 4.3a2.4 2.4
+M7 3.5h0M9 3.5h0
+M8 1.5l1.3 1.8 2.2-.3.5 2.2 2 1-.9 2 .9
+M8 13.6S2 10 2 5.9A3 3 0 0 1 8 4.4a3
+M8 21h8M12 17v4M10 8.5v5l4.5-2.5z
+Main video
+Main video'
+Main wallpaper')+'
+Make one, pick your videos, and your wallpaper changes by itself
+My playlist'
+My playlist'+(PL.length?' '+(PL.length+1)
+New playlist
+No network address'
+No playlists yet
+No video yet'
+No videos here
+No videos yet
+Normal PS5 background in Settings and system apps
+Normal PS5 background')+'
+Nothing found
+Nothing yet')
+Off for '+u.name+'
+On / off
+On your home screen'
+One moment, still switching')
+One playlist plays at a time
+Only games with their own video show one
+Open this address in a browser on your phone or PC
+Own video
+Own wallpaper'
+PS Store only
+PS Store video
+PS5 background'
+PS5 background')
+PS5 background. Each user keeps their own wallpaper
+PS5 background. No main video
+PS5 browser turns buttons into key events
+PS5 look
+PageDown are the usual guesses for L1/R1
+Paused while a game runs'
+Phone and PC
+Pick a 1080p main wallpaper, or turn on Videos per game
+Pick a 1080p video for this game.')
+Pick a video below'
+Pick at least one video')
+Pick the video that plays while this tile is highlighted on
+Picture looks (same strengths as on the home screen)
+Play the videos in a random order
+PlayStation Store'
+Playing now
+Playlist deleted')
+Playlists restored'
+Plays GaelaniLIVE (its own wallpaper)'
+Plays on the PS5
+Press again to reset'))return
+Press again to shut down'))return
+Preview unavailable'
+Quick settings
+Random video on start
+Remove from favorites'
+Removed from favorites')
+Reset settings
+Resume after a game
+SST Pro
+Saved '+d.name)
+Select all
+Set as wallpaper
+Settings reset'
+Settings tab
+Settings tab categories (remembered on this console's browser)
+Shut down GaelaniLIVE
+Signed in
+Slow fade
+Slow fade'
+Solid black
+Sound '+v+'%')
+Switching to '+bare(v.name),'Now playing '+bare(v.name))
+That did not work')
+That did not work'))
+That did not work. Check gaelanilive.log')
+That did not work. Check gaelanilive.log'))
+The Settings tab's copies of the home panel's controls
+The banner is the only video on the page (the home
+The banner previews the Picture settings
+The game's own art shows
+The main video is back on every tile')
+The main wallpaper's resolution for the texts
+The user circle at the top
+The video goes on where it was instead of starting over
+The video shifts a little as you move between games
+The video shows only on the PlayStation Store tile. Other tiles
+This video could not play. Try a 1080p .mp4'
+Tints the picture. With Dim up, it becomes a darker colour
+To use them, pick a 1080p main wallpaper, or turn on
+Turn it on or off, where it hides and which clip
+Turn the video on the home screen on or off
+Turning the wallpaper off')
+Turning the wallpaper on'
+USB drive. It shows up here within a few seconds
+Undo last change
+Upload videos at
+Users show up here once they sign in
+Videos per game
+Videos per game are paused while your main wallpaper is '+mainRes()+'.')
+Videos per game on
+Videos per game only
+Videos per game only needs them on. Turn that off first.')
+Videos per game, and what happens when you start a game
+Waiting for the home screen'
+Wallpaper dimmed '+v+'%')
+Wallpaper groups
+Wallpaper is off'
+Wallpaper off'
+Wallpaper off')
+Wallpaper on'
+When you come back from a game, the video goes on
+Wi-Fi) to upload videos, play them, delete them and turn
+With a cover (Discover's, or a frame the phone / PC
+Your games and apps. Pick one to give it its own
+Your main wallpaper is
+Your picks are kept
+Your videos
+Your wallpaper changes by itself through the videos of the playlist
+again to reset'))return
+again to shut down'))return
+and apps play the video you gave them in
+and every try takes the video hardware from the home screen
+and reset ask twice
+and system apps
+appears inside still fits), and back from the current height to
+are the usual guesses for
+at least one video
+back to the playlists before your last change?'))return
+banner is the only video on the page (the home screen already decodes
+banner preview of the
+banner previews the
+banner video error '+(v.error
+browser on the same
+browser on your phone or
+browser turns buttons into key events
+card only if the user was on one
+categories as big icon tiles, the chosen one below (its own look, not
+closed one shows its current value
+compact rows, like
+controller keys, drawn the same everywhere
+copies of the home panel's controls
+copies of the panel's controls
+darker colour grade
+did not work
+do not retry
+ease-in-out infinite alternate
+else the name on
+every '+p.every+' min'+(p.shuffle
+every installed game and app
+every other tile keeps the
+every tile uses the main video (your choices are kept
+flip the switch at once, undo it if the console says no
+fold-out groups (like the home panel), one open at
+for the home screen
+for this tile
+frame the phone
+game and come back
+game is open
+games and apps
+games with their own video show one
+home screen restarts in
+in case transitionend never comes
+is not running
+is on for '+u.name
+is shutting down
+it on or off, where it hides and which clip starts
+it plays on every tile
+it plays while that tile is highlighted, instead of the main video
+its own wallpaper
+keep at the top
+layer (a tint of the dim layer
+least one user keeps
+light with many videos
+list on the left, the settings panel on the right
+little as you move between games
+looks (same strengths as on the home screen
+main video is back on every tile
+main wallpaper is
+main wallpaper only
+main wallpaper's resolution for the texts
+main wallpaper, or turn on
+menu opens this window with
+name left, big tabs in the middle, wallpaper state right
+named sets of videos the wallpaper changes through by itself (one plays at
+new playlist plays right away
+no home panel (the tab has every setting
+on .sub .why
+on .sub,.main.on .col
+on .tog .sw
+on the console, or into
+on the right
+one open at
+one section open at
+one to give it its own video
+ones count as
+only when something shown changed
+open .acc svg
+opening one closes the others
+opt div span
+opt user'+(u.on?' on
+other tiles keep the
+own art shows
+own music goes quiet while one plays
+per console user
+per game are paused while your main wallpaper is '+
+per game on
+per game only
+per game only needs them on
+per game, and what happens when you start
+pick your videos, and your wallpaper changes by itself
+picker opened for game '+tid
+picks are kept
+pinned at the top of the list until un-favorited (the console keeps
+placeholder instead (gradient
+playlist plays at
+plays only for the users turned on
+plc .t em
+plc .t em.live
+press goes to the original
+rebuild reloads every cover (they flickered on each state poll
+reset and shut down
+scard .pic .sres
+scard .pic img
+set for '+
+show the picker
+show up here once they sign in
+shows up here within
+slow push-in, then the fade
+so they can be mapped
+so videos per game are paused
+sphead .sico.big svg
+stays at the top
+tab categories (remembered on this console's browser
+tap lists every user with
+tap one to give it its own video
+that off first
+the browser cannot play it (error
+the clip itself, live
+the clip's own picture, else its
+the first open starts at the top
+the first press arms the button for
+the headers sum up what is inside
+the main video off
+the normal fade
+the others see the normal
+the picture holds
+the picture, slowly drifting
+the see-through frosted look came out grey on the
+the side panel's
+the signed-in user
+the video comes back when you close it
+the video goes on where it was instead of starting over
+the video on the home screen on or off
+the video that plays while this tile is highlighted on the home screen
+the videos in
+the wallpaper changes every '+d.every+' min
+the wallpaper leaves when
+the wallpaper off
+the wallpaper on
+then fades slowly
+then only games with their own video show one
+this address in
+this clip cannot play in the browser
+tiles keep the normal
+to the content's height (then auto, so
+to upload videos, play them, delete them and turn the wallpaper on or
+triangle send is
+up the address
+urow .un small
+use them, pick
+user circle at the top
+user keeps their own wallpaper
+uses the main wallpaper
+video could not play
+video for this game
+video goes on where it was instead of starting over
+video on start
+video shows only on the
+video to get started
+video to this playlist first
+videos always hide while
+videos with sound
+videos work as the main wallpaper only
+wallpaper changes by itself through the videos of the playlist that is on
+wallpapers for the
+with their own video
+you come back from
+your home screen
+your main wallpaper is '+

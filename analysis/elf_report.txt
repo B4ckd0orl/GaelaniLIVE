@@ -1,0 +1,41 @@
+== ELF header ==
+entry=0x5fe34 type=3 (DYN/PIE) machine=62 (x86-64) phnum=4 shnum=22
+
+== Sections ==
+                         type=0   addr=0x00000000 off=0        size=0        link=0
+.text                    type=1   addr=0x00000000 off=16384    size=420992   link=0
+__lcxx_override          type=1   addr=0x00066c80 off=437376   size=341      link=0
+.stager_shellcode$1      type=1   addr=0x00066de0 off=437728   size=37       link=0
+.stager_shellcode$2      type=1   addr=0x00066e10 off=437776   size=3        link=0
+.eh_frame_hdr            type=1   addr=0x00068000 off=442368   size=8596     link=0
+.eh_frame                type=1   addr=0x0006a198 off=450968   size=41892    link=0
+.gcc_except_table        type=1   addr=0x0007453c off=492860   size=13480    link=0
+.dynsym                  type=11  addr=0x000779e8 off=506344   size=13512    link=10
+.gnu.hash                type=1879048182 addr=0x0007aeb0 off=519856   size=3144     link=8
+.dynstr                  type=3   addr=0x0007baf8 off=523000   size=9762     link=0
+.rela.dyn                type=4   addr=0x0007e120 off=532768   size=48408    link=8
+.data.rel.ro             type=1   addr=0x00089e40 off=581184   size=17776    link=0
+.got                     type=1   addr=0x0008e3b0 off=598960   size=1192     link=0
+.rodata                  type=1   addr=0x0008e860 off=600160   size=670548   link=0
+.init_array              type=1   addr=0x001323b8 off=1270712  size=32       link=0
+.fini_array              type=1   addr=0x001323d8 off=1270744  size=0        link=0
+.dynamic                 type=6   addr=0x00134000 off=1277952  size=432      link=10
+.data                    type=1   addr=0x00138000 off=1294336  size=400      link=0
+.bss                     type=8   addr=0x00138190 off=1294736  size=6992     link=0
+.comment                 type=1   addr=0x00000000 off=1294736  size=77       link=0
+.shstrtab                type=3   addr=0x00000000 off=1294813  size=230      link=0
+
+== Program headers ==
+phdr0: type=1 flags=7 off=16384 vaddr=0x0 filesz=421395 memsz=421395
+phdr1: type=1 flags=6 off=442368 vaddr=0x68000 filesz=836016 memsz=836016
+phdr2: type=1 flags=6 off=1294336 vaddr=0x138000 filesz=400 memsz=7392
+phdr3: type=2 flags=6 off=1277952 vaddr=0x134000 filesz=432 memsz=432
+
+dynsym entries: 376  rela.dyn entries: 2017
+embedded PNG: 0x133360-0x135d8a (10794 bytes) -> assets/embedded_icon0.png
+embedded HTML page0: 0x105070-0x11c475 (95237 bytes)
+embedded HTML page1: 0x11c490-0x13335c (93900 bytes)
+
+disassembling .text 0x0+420992 ...
+instructions written: 36939
+total instructions: 109725

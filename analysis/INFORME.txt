@@ -1,0 +1,54 @@
+INFORME FASE A — Analisis del ELF original liveshell.elf (LiveShell Engine v1.5.0)
+=================================================================================
+Fecha: 2026-10-21. Herramienta: Python 3.12 + Capstone 5.0.7 (tools/analyze_elf.py).
+
+1. IDENTIFICACION
+   - ELF64 little-endian, x86-64 (EM_X86_64), tipo ET_DYN (PIE) — payload de PS5.
+   - Tamano: 1.296.456 bytes. Entry point: 0x5fe34.
+   - Compilador: clang/LLVM (seccion __lcxx_override, .comment "Ubuntu clang version 18").
+   - Cadena de build del autor: /home/chad/ps5/wallpaper/onionHEN-beta2/... (OnionHEN v0.9.0-beta2).
+   - Version embebida: "LiveShell Engine v1.5.0" (por AZiZ / ZiZc3).
+   - Licencia: GPL-3.0 (repo oficial https://github.com/ZiZc3/LiveShell).
+
+2. ESTRUCTURA (secciones clave)
+   .text            0x000000  420.992 B   codigo (incluye daemon + shellui embebido + stubs)
+   __lcxx_override  0x066c80      341 B   runtime libcxx
+   .stager_shellcode$1/$2  0x66de0    40 B  stager de carga (OnionHEN)
+   .eh_frame*                  50.488 B   excepciones C++
+   .dynsym / .dynstr / .rela.dyn          376 simbolos, 2.017 relocs (imports dinamicos)
+   .data.rel.ro / .got                   tablas C++ (vtables, typeinfo, GOT)
+   .rodata          0x08e860  670.548 B   texto: 2 paginas HTML (app + remote) + icon PNG + strings
+   .init_array                 32 B       constructores globales
+   .data / .bss               400/6992 B  estado global
+
+3. ARQUITECTURA FUNCIONAL (confirmada contra el fuente oficial)
+   liveshell.elf = payload unico OnionHEN que arrastra:
+   - liveshell_daemon.cpp  : hilo principal, config /data/LiveShell/*, listas de video,
+     playlists, juegos (/user/appmeta), usuarios, notificaciones, red (puerto 9050 web / 9049 stop).
+   - liveshell_web.cpp      : servidor HTTP 127.0.0.1:9050 con /api/*; sirve liveshell_page.html
+     (app del home) y liveshell_remote.html (movil/PC).
+   - liveshell_tile.cpp     : instala el tile "LiveShell Engine" en el home (Media); embebe icon0.png.
+   - liveshell_shellui.elf  : segundo ELF embebido (se inyecta en SceShellUI via libonion_detour);
+     dibuja el video de fondo, dim/vignette/haze, parallax, efectos de lanzamiento.
+   - IPC daemon<->shellui via archivos /system_tmp/liveshell/*.txt (video.txt, status.txt, ...).
+
+4. ASSETS EMBEBIDOS EN .rodata (extraidos a analysis/assets/)
+   - embedded_icon0.png   0x133360  10.794 B  == assets/icon0.png del repo oficial (sha256 coincide)
+   - embedded_page0.html  0x105070  95.237 B  liveshell_page.html (app de la PS5, v1.5.0)
+   - embedded_page1.html  0x11c490  93.900 B  liveshell_remote.html (pagina movil/PC)
+   Nota: los HTML embebidos son mayores que el main actual del repo (80.770 / 76.155 B),
+   es decir el ELF se construyo en un commit cercano a v1.5.0; el repo main sigue siendo
+   la base correcta y mas actual para el rebuild.
+
+5. DESENSAMBLADO COMPLETO
+   - disasm/liveshell_full.asm: 109.725 instrucciones, anotadas con simbolos dynsym y
+     destinos de call a imports dinamicos (sceKernel*, malloc, pthread, ...).
+   - analysis/imports_relocs.txt: mapa GOT->simbolo (2.017 entradas).
+   - analysis/dynsym.txt: 376 simbolos exportados/locales.
+   - analysis/strings_categorized.txt: 3.681 strings (paths, APIs, versiones, Sce*).
+
+6. CONCLUSION
+   El ELF NO contiene codigo proprietario desconocido: es la compilacion oficial del fuente
+   GPL-3.0 de ZiZc3/LiveShell. GaelaniLIVE se reconstruye desde ese fuente (no desde el
+   desensamblado), usando este analisis solo como verificacion. Rutas y marcas a renombrar:
+   /data/LiveShell/*, /system_tmp/liveshell/*, "LiveShell Engine", puertos 9050/9049.

@@ -1,0 +1,10 @@
+# build outputs
+build/
+_upstream/
+*.elf
+.vscode/
+__pycache__/
+*.pyc
+disasm/*.asm
+
+tools/_*.py

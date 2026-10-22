@@ -1,0 +1,98 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout GaelaniLIVE
+        uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-18 lld-18 cmake ninja-build wget unzip git
+
+      - name: PS5 Payload SDK (release)
+        run: |
+          wget -q https://github.com/ps5-payload-dev/sdk/releases/latest/download/ps5-payload-sdk.zip -O /tmp/ps5sdk.zip
+          sudo unzip -q -o /tmp/ps5sdk.zip -d /opt
+          test -d /opt/ps5-payload-sdk && echo "PS5_PAYLOAD_SDK=/opt/ps5-payload-sdk" >> "$GITHUB_ENV"
+
+      - name: OnionHEN v0.9.0-beta2
+        run: |
+          git clone --depth 1 --branch v0.9.0-beta2 \
+            https://github.com/aydencharles/onionHEN.git "$HOME/onionHEN-beta2"
+          cd "$HOME/onionHEN-beta2"
+          git submodule update --init --recursive --depth 1
+          echo "ONIONHEN=$HOME/onionHEN-beta2" >> "$GITHUB_ENV"
+
+      - name: Sync OnionHEN dependencies (kstuff etc.)
+        run: |
+          cd "$ONIONHEN"
+          if [ -x scripts/sync_dependencies.sh ]; then
+            ./scripts/sync_dependencies.sh || true
+          fi
+          ls -la .cache/dependencies/ || true
+
+      - name: Inject GaelaniLIVE into OnionHEN tree
+        run: |
+          DEST="$ONIONHEN/source/gaelanilive"
+          mkdir -p "$DEST"
+          cp src/*.cpp src/*.hpp src/*.c src/*.h src/*.html src/CMakeLists.txt "$DEST/"
+          cp assets/icon0.png "$DEST/icon0.png"
+          grep -q '^add_subdirectory(gaelanilive)' "$ONIONHEN/source/CMakeLists.txt" \
+            || echo 'add_subdirectory(gaelanilive)' >> "$ONIONHEN/source/CMakeLists.txt"
+
+      - name: Configure
+        run: |
+          export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
+          export LLVM_CONFIG=/usr/lib/llvm-18/bin/llvm-config
+          cmake -S "$ONIONHEN/source" -B "$ONIONHEN/build" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DONIONHEN_KSTUFF_ELF="$ONIONHEN/.cache/dependencies/kstuff.elf" \
+            -DPS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK" \
+            2>&1 | tail -30
+
+      - name: Build gaelanilive.elf
+        run: |
+          export PS5_PAYLOAD_SDK="$PS5_PAYLOAD_SDK"
+          cmake --build "$ONIONHEN/build" -j"$(nproc)" --target gaelanilive
+          sha256sum "$ONIONHEN/build/bin/gaelanilive.elf"
+          cp "$ONIONHEN/build/bin/gaelanilive.elf" "$GITHUB_WORKSPACE/gaelanilive.elf"
+
+      - name: Verify branding in ELF
+        run: |
+          python3 - <<'PY'
+          import sys
+          data = open('gaelanilive.elf', 'rb').read()
+          must = [b'GaelaniLIVE', b'/data/GaelaniLIVE', b'gaelanilive.log']
+          forbidden = [b'/data/LiveShell', b'/system_tmp/liveshell']
+          ok = True
+          for m in must:
+              if m not in data:
+                  print('MISSING:', m.decode()); ok = False
+          for f in forbidden:
+              if f in data:
+                  print('FORBIDDEN PRESENT:', f.decode()); ok = False
+          sys.exit(0 if ok else 1)
+          PY
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gaelanilive-elf
+          path: gaelanilive.elf
+
+      - name: Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gaelanilive.elf
+          generate_release_notes: true
